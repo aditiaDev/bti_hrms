@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
-@section('page-content')
+@section('page-css')
+<link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
+@endsection
 
+@section('page-content')
 <div class="main-content">
   <div class="main-content-inner">
     <div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -41,7 +45,7 @@
                 <div class="widget-main">
                   <div>
                     <label>Role Name</label>
-                    <input type="text" name="role_name" class="form-control" required>
+                    <input type="text" name="role_name" class="form-control" oninput="this.value = this.value.toUpperCase()" required>
                   </div>
                   <div>
                     <label>Status Activation</label>
@@ -125,6 +129,13 @@
   let action='save'
   let tb_data
   let id_data
+
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
   REFRESH_DATA()
   function REFRESH_DATA() {
     $('#tb_data').DataTable().destroy();
@@ -183,11 +194,7 @@
     document.getElementById("frmData").reset();
   }
 
-  $.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
+  
 
   function ACTION_PROCESS(urlPost, formData, method) {
     $.ajax({
@@ -236,6 +243,23 @@
 
     ACTION_PROCESS(urlPost, formData, method)
   })
+
+  function editData(data){
+    event.preventDefault()
+    action = "edit"
+
+    id_data = data.id
+    $("[name='role_name']").val(data.role_name)
+    $("[name='isactive']").val(data.isactive)
+  }
+
+  function actActivate(status, id){
+    urlPost = "{{ route('role.changeStatus') }}"
+    formData = "id="+id+"&isactive="+status
+    method = "POST"
+
+    ACTION_PROCESS(urlPost, formData, method)
+  }
 </script>
 
 @endsection

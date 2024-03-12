@@ -11,16 +11,16 @@
   <meta property="og:url" content="{{ env('APP_URL') }}">
   <meta property="og:description" content="{{ env('APP_DESC') }}">
   <meta property="og:title" content="{{ env('APP_NAME') }}">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_ID">
 
   <!-- bootstrap & fontawesome -->
 
-
   <link rel="stylesheet" href="{{ asset('css/ace.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
   <link rel="stylesheet" href="{{ asset('assets/font-awesome/4.5.0/css/font-awesome.min.css') }}" />
-  <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
+  @yield('page-css')
+  
   {{--
   <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
   <link rel="stylesheet" href="assets/css/ace-rtl.min.css" /> --}}
@@ -29,6 +29,11 @@
   <!-- ace settings handler -->
   {{-- <script src="assets/js/ace-extra.min.js"></script> --}}
   <style>
+    html {
+      font-size: 16px;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
     #overlay {
       position: fixed;
       top: 0;

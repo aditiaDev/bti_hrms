@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::post('/role/getall', [RoleController::class, 'getall'])->name('role.getall');
-    Route::post('/role/store', [RoleController::class, 'store'])->name('role.store');
-    Route::post('/role/update', [RoleController::class, 'update'])->name('role.update');
+  Route::post('/role/getall', [RoleController::class, 'getall'])->name('role.getall');
+  Route::post('/role/store', [RoleController::class, 'store'])->name('role.store');
+  Route::post('/role/update', [RoleController::class, 'update'])->name('role.update');
+  Route::post('/role/changeStatus', [RoleController::class, 'changeStatus'])->name('role.changeStatus');
 });

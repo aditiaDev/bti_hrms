@@ -59,7 +59,7 @@ class LoginController extends Controller
     ]);
 
     if (Auth::attempt($credentials)) {
-      if (Auth::user()->isActive <> 1) {
+      if (Auth::user()->isactive <> 1) {
         Auth::logout();
         Session::flash('error', 'Your account is not activated yet.');
         return redirect('/');
