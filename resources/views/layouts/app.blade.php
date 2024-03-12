@@ -1,83 +1,102 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta charset="utf-8" />
+  <title>{{ env('APP_NAME') }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ env('APP_DESC') }}">
+  <meta content="IT" name="author" />
+  <meta property="og:url" content="{{ env('APP_URL') }}">
+  <meta property="og:description" content="{{ env('APP_DESC') }}">
+  <meta property="og:title" content="{{ env('APP_NAME') }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_ID">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- bootstrap & fontawesome -->
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ asset('css/ace.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
+  <link rel="stylesheet" href="{{ asset('assets/font-awesome/4.5.0/css/font-awesome.min.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
+  {{--
+  <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+  <link rel="stylesheet" href="assets/css/ace-rtl.min.css" /> --}}
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <!-- ace settings handler -->
+  {{-- <script src="assets/js/ace-extra.min.js"></script> --}}
+  <style>
+    #overlay {
+      position: fixed;
+      top: 0;
+      z-index: 10000;
+      width: 100%;
+      height: 100%;
+      display: none;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .cv-spinner {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px #ddd solid;
+      border-top: 4px #2e93e6 solid;
+      border-radius: 50%;
+      animation: sp-anime 0.8s infinite linear;
+    }
+
+    @keyframes sp-anime {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
+<body class="no-skin">
+  <div id="overlay">
+    <div class="cv-spinner">
+      <span class="spinner"></span>
     </div>
+  </div>
+  {{-- Navbar --}}
+  <x-navbar></x-navbar>
+  {{-- Navbar --}}
+
+  <div class="main-container ace-save-state" id="main-container">
+    <script type="text/javascript">
+      try{ace.settings.loadState('main-container')}catch(e){}
+    </script>
+
+    {{-- Sidebar --}}
+    <x-sidebar></x-sidebar>
+    {{-- Sidebar --}}
+
+    {{-- Main Content --}}
+    @yield('page-content')
+    {{-- Main Content --}}
+
+    {{-- Footer --}}
+    <x-footer></x-footer>
+    {{-- Footer --}}
+  </div><!-- /.main-container -->
+
+  <script src="{{ asset('js/jquery.js') }}"></script>
+  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('js/ace.js') }}"></script>
+  @yield('page-js')
+
 </body>
+
 </html>
