@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('page-css')
-<link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}">
+{{--
+<link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}"> --}}
 <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
 @endsection
 
@@ -16,9 +17,9 @@
         </li>
 
         <li>
-          <a href="#">Configuration</a>
+          <a href="#">{{ $data['parent-menu'] }}</a>
         </li>
-        <li class="active">{{ $data['title'] }}</li>
+        <li class="active">{{ $data['child-menu'] }}</li>
       </ul><!-- /.breadcrumb -->
     </div>
 
@@ -27,7 +28,7 @@
         <div class="col-xs-8 col-md-4">
           <div class="widget-box">
             <div class="widget-header">
-              <h4 class="widget-title">Add Data</h4>
+              <h4 class="widget-title" id="titleAction">Add Data</h4>
 
               <div class="widget-toolbar">
                 <a href="#" data-action="collapse">
@@ -45,7 +46,8 @@
                 <div class="widget-main">
                   <div>
                     <label>Role Name</label>
-                    <input type="text" name="role_name" class="form-control" oninput="this.value = this.value.toUpperCase()" required>
+                    <input type="text" name="role_name" class="form-control"
+                      oninput="this.value = this.value.toUpperCase()" required>
                   </div>
                   <div>
                     <label>Status Activation</label>
@@ -96,7 +98,7 @@
             <div class="widget-body">
               <div class="widget-main">
                 <div class="row">
-                  <div class="col-xs-12">
+                  <div class="col-xs-12 col-md-12">
                     <div style="overflow-x: auto;">
                       <table id="tb_data" class="table table-bordered table-hover">
                         <thead>
@@ -123,7 +125,7 @@
 @endsection
 @section('page-js')
 <script src="{{ asset('js/datatables.min.js') }}"></script>
-<script src="{{ asset('js/dataTables.responsive.js') }}"></script>
+{{-- <script src="{{ asset('js/dataTables.responsive.js') }}"></script> --}}
 <script src="{{ asset('js/sweetalert2.js') }}"></script>
 <script>
   let action='save'
@@ -142,10 +144,13 @@
     tb_data = $("#tb_data").DataTable({
       "ordering": false,
       "paging": false,
-      "responsive": true,
+      // "responsive": true,
       "ajax": {
         "url": "{{ route('role.getall') }}",
         "type": "POST",
+        "data": function (d) {
+          d._token = $('meta[name="csrf-token"]').attr('content')
+        }
       },
       "columnDefs": [
         { width: '60px', targets: 0 },
@@ -161,9 +166,9 @@
         {
           "data": "isactive",
           "render": function (data) {
-            let status = 'Not Active'
+            let status = '<span class="label label-sm label-danger arrowed-in">Not Active</span>'
             if (data == 1) {
-              status = 'Active'
+              status = '<span class="label label-sm label-success arrowed-in">Active</span>'
             }
 
             return status
@@ -192,6 +197,8 @@
   function resetForm() {
     event.preventDefault()
     document.getElementById("frmData").reset();
+    action='save'
+    $("#titleAction").text('Add Data')
   }
 
   
@@ -213,7 +220,7 @@
         REFRESH_DATA()
         resetForm()
         action='save'
-
+        $("#titleAction").text('Add Data')
       },
       error: function (datas) {
         console.log(datas)
@@ -248,12 +255,15 @@
     event.preventDefault()
     action = "edit"
 
+    $("#titleAction").text('Edit Data')
+
     id_data = data.id
     $("[name='role_name']").val(data.role_name)
     $("[name='isactive']").val(data.isactive)
   }
 
   function actActivate(status, id){
+    if (!confirm('Proses data ini?')) return
     urlPost = "{{ route('role.changeStatus') }}"
     formData = "id="+id+"&isactive="+status
     method = "POST"

@@ -15,6 +15,8 @@ class RoleController extends Controller
   public function index()
   {
     $data = [
+      'parent-menu' => "Konfigurasi",
+      'child-menu' => "User Role",
       'title' => 'Data User Role',
     ];
     return view('config.role.index')->with('data', $data);
@@ -50,7 +52,8 @@ class RoleController extends Controller
     }
   }
 
-  public function update(Request $request){
+  public function update(Request $request)
+  {
     $validator = Validator::make($request->all(), [
       'id' => 'required',
       'role_name' => 'required',
@@ -64,17 +67,18 @@ class RoleController extends Controller
 
     try {
       Role::where('id', $request->id)
-      ->update([
-        'role_name' => $request->role_name,
-        'isactive' => $request->isactive,
-      ]);
+        ->update([
+          'role_name' => $request->role_name,
+          'isactive' => $request->isactive,
+        ]);
       return response()->json(['status' => 'success', 'message' => 'Save Data Successfully.'], 200);
     } catch (\Illuminate\Database\QueryException $e) {
       return response()->json(['status' => 'error', 'message' => 'Error Saving Data, ' . $e->errorInfo[2]], 200);
     }
   }
 
-  public function changeStatus(Request $request){
+  public function changeStatus(Request $request)
+  {
     $validator = Validator::make($request->all(), [
       'id' => 'required',
       'isactive' => 'required',
@@ -87,9 +91,9 @@ class RoleController extends Controller
 
     try {
       Role::where('id', $request->id)
-      ->update([
-        'isactive' => $request->isactive,
-      ]);
+        ->update([
+          'isactive' => $request->isactive,
+        ]);
       return response()->json(['status' => 'success', 'message' => 'Save Data Successfully.'], 200);
     } catch (\Illuminate\Database\QueryException $e) {
       return response()->json(['status' => 'error', 'message' => 'Error Saving Data, ' . $e->errorInfo[2]], 200);

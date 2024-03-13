@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Conf\RoleController;
+use App\Http\Controllers\Kepegawaian\KaryawanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,6 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/role/store', [RoleController::class, 'store'])->name('role.store');
   Route::post('/role/update', [RoleController::class, 'update'])->name('role.update');
   Route::post('/role/changeStatus', [RoleController::class, 'changeStatus'])->name('role.changeStatus');
+
+  Route::post('/karyawan/getall', [KaryawanController::class, 'getall'])->name('karyawan.getall');
 });

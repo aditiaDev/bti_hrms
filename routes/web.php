@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Conf\RoleController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Kepegawaian\KaryawanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,10 @@ Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('au
 
 Route::group(['middleware' => ['auth']], function () {
   Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
-  Route::get('/role', [RoleController::class, 'index'])->name('role');
 
   Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+  Route::get('/role', [RoleController::class, 'index'])->name('role');
+
+  Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan');
 });

@@ -18,7 +18,8 @@ mix.js('resources/js/app.js', 'public/js')
   'resources/ace/css/ace.min.css',
 ], 'public/css/ace.css')
 .styles([
-  'resources/ace/css/responsive.dataTables.min.css',
+  // 'resources/ace/css/responsive.dataTables.min.css',
+  'resources/css/datatables.min.css',
 ], 'public/css/responsive.dataTables.css')
 .styles([
   'resources/ace/css/sweetalert2.min.css',
@@ -34,8 +35,9 @@ mix.js('resources/js/app.js', 'public/js')
   'resources/ace/js/ace.min.js',
 ], 'public/js/ace.js')
 .scripts([
-  'resources/ace/js/jquery.dataTables.min.js',
-  'resources/ace/js/jquery.dataTables.bootstrap.min.js',
+  // 'resources/ace/js/jquery.dataTables.min.js',
+  // 'resources/ace/js/jquery.dataTables.bootstrap.min.js',
+  'resources/js/datatables.min.js',
 ], 'public/js/datatables.min.js')
 .scripts([
   'resources/ace/js/sweetalert2.all.min.js',
