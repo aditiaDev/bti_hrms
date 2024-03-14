@@ -34,4 +34,5 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/role', [RoleController::class, 'index'])->name('role');
 
   Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan');
+  Route::get('/karyawan/new', [KaryawanController::class, 'new'])->name('karyawan.new');
 });

@@ -37,4 +37,14 @@ class KaryawanController extends Controller
 
 		return json_encode(array('data' => $data));
 	}
+
+	public function new()
+	{
+		$data = [
+			'parent-menu' => "Kepegawaian",
+			'child-menu' => "Data Karyawan",
+			'title' => 'Add New Karyawan',
+		];
+		return view('kepegawaian.karyawan.new')->with('data', $data);
+	}
 }

@@ -107,8 +107,9 @@
       <div class="row">
         <div class="col-xs-12 col-md-12">
           <div style="margin-bottom:10px;">
-            <button class="btn btn-sm btn-info" id="btnNew"><i class="ace-icon fa fa-plus-circle bigger-110"></i>
-              New</button>
+            <a class="btn btn-sm btn-info" href="{{ route('karyawan.new') }}" id="btnNew"><i
+                class="ace-icon fa fa-plus-circle bigger-110"></i>
+              New</a>
             <button class="btn btn-sm btn-grey" id="btnEmpTransfer"><i class="ace-icon fa fa-exchange bigger-110"></i>
               Employee Transfer</button>
             <button class="btn btn-sm btn-pink" id="btnPrintID"><i class="ace-icon fa fa-print bigger-110"></i> Print ID
@@ -166,6 +167,32 @@
     </div>
   </div>
 </div>
+
+<!-- staticBackdrop Modal -->
+{{-- <div class="modal fade" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Add New Data</h4>
+      </div>
+      <form id="frmData">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">OK</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> --}}
 @endsection
 @section('page-js')
 <script src="{{ asset('js/datatables.min.js') }}"></script>
@@ -182,7 +209,16 @@
     }
   });
 
+  $(document).ajaxStart(function(){
+      $('#overlay').fadeIn(300);
+    });
+    // AJAX request ends, hide loader
+    $(document).ajaxStop(function(){
+      $('#overlay').fadeOut(500);
+    });
+
   function REFRESH_DATA() {
+
     $('#tb_data').DataTable().destroy();
     tb_data = $("#tb_data").DataTable({
       "ordering": false,
@@ -196,9 +232,12 @@
       "ajax": {
         "url": "{{ route('karyawan.getall') }}",
         "type": "POST",
-        "data": function (d) {
-          d._token = $('meta[name="csrf-token"]').attr('content')
+        "headers": {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+        // "data": function (d) {
+        //   d._token = $('meta[name="csrf-token"]').attr('content')
+        // }
       },
       // "columnDefs": [
       //   { width: '60px', targets: 0 },
