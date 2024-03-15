@@ -1,4 +1,4 @@
-<div id="sidebar" class="sidebar responsive ace-save-state">
+<div id="sidebar" class="sidebar responsive ace-save-state sidebar-fixed sidebar-scroll">
   <script type="text/javascript">
     try{ace.settings.loadState('sidebar')}catch(e){}
   </script>

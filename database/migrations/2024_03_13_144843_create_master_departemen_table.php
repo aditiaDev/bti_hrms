@@ -18,6 +18,7 @@ class CreateMasterDepartemenTable extends Migration
             $table->string('dept_name', 100)->unique();
             $table->string('note', 250)->nullable();
             $table->string('prefix', 3)->nullable();
+            $table->smallInteger('digit_number')->nullable();
             $table->tinyInteger('isactive')->comment('1=aktif, 0=non aktif');
         });
     }
