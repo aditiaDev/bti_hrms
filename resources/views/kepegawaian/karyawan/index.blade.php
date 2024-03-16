@@ -44,7 +44,7 @@
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-xs-12 col-md-4">
-                      <div class="form-horizontal">
+                      <form id="frmFilter" class="form-horizontal">
                         <div class="form-group">
                           <label class="col-sm-4 control-label no-padding-right"> Departemen</label>
 
@@ -80,7 +80,7 @@
                             </select>
                           </div>
                         </div>
-                      </div>
+                      </form>
                     </div>
                     <div class="col-xs-12 col-md-4">
                       <div class="form-horizontal">
@@ -88,14 +88,26 @@
                           <label class="col-sm-5 control-label no-padding-right"> Status Kepegawaian</label>
 
                           <div class="col-sm-7">
-                            <select name="status_kepegawaian" class="form-control"></select>
+                            <select name="status_kepegawaian" class="form-control">
+                              <option value="">Tampilkan Semua</option>
+                              @foreach ($data['status_kepegawaian'] as $item)
+                              <option value="{{ $item->code }}">{{ $item->desc }}
+                              </option>
+                              @endforeach
+                            </select>
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="col-sm-5 control-label no-padding-right"> Status Pekerja</label>
 
                           <div class="col-sm-7">
-                            <select name="status_pekerja" class="form-control"></select>
+                            <select name="status_pekerja" class="form-control">
+                              <option value="">Tampilkan Semua</option>
+                              @foreach ($data['status_pegawai'] as $item)
+                              <option value="{{ $item->code }}">{{ $item->desc }}
+                              </option>
+                              @endforeach
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -104,8 +116,11 @@
                       <div class="form-horizontal">
                         <div class="form-group">
                           <div class="col-sm-12">
-                            <button type="button" class="btn btn-info btn-sm">
+                            <button type="button" id="btnFilter" class="btn btn-info btn-sm">
                               <i class="ace-icon fa fa-filter bigger-110"></i>Filter
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm">
+                              <i class="ace-icon fa fa-times bigger-110"></i>Clear Filter
                             </button>
                           </div>
                         </div>
@@ -236,6 +251,7 @@
   });
 
   function REFRESH_DATA() {
+    let frmFilter = $("#frmFilter").serializeArray()
 
     $('#tb_data').DataTable().destroy();
     tb_data = $("#tb_data").DataTable({
@@ -250,6 +266,12 @@
       "ajax": {
         "url": "{{ route('karyawan.getall') }}",
         "type": "POST",
+        "data": function(d){
+          d.form = frmFilter
+        },
+        "beforeSend": function(request) {
+          request.setRequestHeader("X-CSRFToken", $('meta[name="csrf-token"]').attr('content') );
+        },
         "headers": {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
@@ -348,8 +370,7 @@
           id_dept
         },
         success:function(response){
-          let row = '<option value="" selected disabled>Pilih Divisi</option>'
-          row += '<option value="" >Tampilkan Semua</option>'
+          let row = '<option value="" >Tampilkan Semua</option>'
           $.map(response, function(val, i){
             row += '<option value="'+val.id+'">'+val.divisi_name+'</option>'
           })
@@ -359,6 +380,10 @@
     }else{
       $("[name='divisi']").html('<option value="">Pilih Divisi</option>'); 
     }
+  })
+
+  $("#btnFilter").click(function(){
+    REFRESH_DATA()
   })
 </script>
 

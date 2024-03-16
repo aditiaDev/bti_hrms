@@ -20,6 +20,8 @@ class KaryawanController extends Controller
 	{
 		$dept = Departemen::select('id', 'dept_name')->where('isactive', 1)->orderBy('dept_name')->get();
 		$jabatan = Jabatan::select('id', 'jabatan_name')->where('isactive', 1)->orderBy('jabatan_name')->get();
+		$status_kepegawaian = MasterCode::select('code', 'desc')->where('type', 'STATUS KEPEGAWAIAN')->orderBy('id')->get();
+		$status_pegawai = MasterCode::select('code', 'desc')->where('type', 'STATUS PEGAWAI')->orderBy('id')->get();
 
 		$data = [
 			'parent-menu' => "Kepegawaian",
@@ -27,12 +29,22 @@ class KaryawanController extends Controller
 			'title' => 'Data Karyawan',
 			'dept' => $dept,
 			'jabatan' => $jabatan,
+			'status_kepegawaian' => $status_kepegawaian,
+			'status_pegawai' => $status_pegawai,
 		];
 		return view('kepegawaian.karyawan.index')->with('data', $data);
 	}
 
-	public function getall()
+	public function getall(Request $request)
 	{
+
+		$params = array();
+		foreach ($request->all()['form'] as $key => $value) {
+			$params[$value['name']] = $value['value'];
+		}
+
+
+
 		$data = DB::select("
 		SELECT 
 		A.id, A.nama, A.nik, B.dept_name, C.divisi_name, D.jabatan_name, A.notelp, A.isactive
