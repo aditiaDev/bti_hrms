@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
 <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
 <style>
   .table>tbody>tr>td,
   .table>tbody>tr>th,
@@ -23,6 +24,24 @@
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+
+  input[type=checkbox].ace.ace-switch.ace-switch-4+.lbl::before,
+  input[type=checkbox].ace.ace-switch.ace-switch-5+.lbl::before {
+    content: "Aktif\a0\a0\a0\a0\a0\a0\a0Non Aktif";
+    width: 70px;
+    font-size: 11px;
+    line-height: 22px;
+  }
+
+  input[type=checkbox].ace.ace-switch.ace-switch-4:checked+.lbl::after,
+  input[type=checkbox].ace.ace-switch.ace-switch-5:checked+.lbl::after {
+    left: 49px;
+  }
+
+  input[type=checkbox].ace.ace-switch.ace-switch-4+.lbl::after,
+  input[type=checkbox].ace.ace-switch.ace-switch-5+.lbl::after {
+    left: 1px;
   }
 </style>
 @endsection
@@ -76,7 +95,8 @@
                               <td style="min-width: 150px;width:300px;">
                                 <div class="form-inline">
                                   <input type="text" name="nik" class="form-control" style="width: 150px;"
-                                    oninput="this.value = this.value.toUpperCase()">
+                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                    required>
                                   <button type="button" id="genNIK" class="btn btn-sm btn-danger">
                                     <i class="ace-icon fa fa-credit-card bigger-110"></i>
                                     Generate NIK
@@ -87,8 +107,21 @@
                             </tr>
                             <tr>
                               <td class="text-right"><label style="padding-top: 7px;">Nama</label></td>
-                              <td><input type="text" name="nama" class="form-control" style="max-width: 300px;"
-                                  oninput="this.value = this.value.toUpperCase()" required></td>
+                              <td>
+                                <input type="text" name="nama" class="form-control" style="max-width: 300px;"
+                                  oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                  required>
+                              </td>
+                              <td>
+                                <div class="checkbox">
+                                  <label>
+                                    <input name="isactive" class="ace ace-switch ace-switch-4 btn-rotate"
+                                      type="checkbox" value="1" checked>
+
+                                    <span class="lbl"></span>
+                                  </label>
+                                </div>
+                              </td>
                             </tr>
                             <tr>
                               <td class="text-right"><label style="padding-top: 7px;">Dept</label></td>
@@ -103,22 +136,14 @@
                               </td>
                               <td>
                                 <div class="radio">
+                                  @foreach ($data['status_kepegawaian'] as $item)
                                   <label>
-                                    <input name="status_kepegawaian" type="radio" class="ace">
-                                    <span class="lbl"> PKWTT</span>
+                                    <input name="status_kepegawaian" type="radio" class="ace" {{ $item->code == '2' ?
+                                    'checked' :
+                                    '' }} value="{{ $item->code }}">
+                                    <span class="lbl"> {{ $item->desc }}</span>
                                   </label>
-                                  <label>
-                                    <input name="status_kepegawaian" checked type="radio" class="ace">
-                                    <span class="lbl"> PKWT</span>
-                                  </label>
-                                  <label>
-                                    <input name="status_kepegawaian" type="radio" class="ace">
-                                    <span class="lbl"> HL</span>
-                                  </label>
-                                  <label>
-                                    <input name="status_kepegawaian" type="radio" class="ace">
-                                    <span class="lbl"> Permanen</span>
-                                  </label>
+                                  @endforeach
                                 </div>
                               </td>
                             </tr>
@@ -132,14 +157,14 @@
                               </td>
                               <td>
                                 <div class="radio">
+                                  @foreach ($data['status_pegawai'] as $item)
                                   <label>
-                                    <input name="status_pegawai" checked type="radio" class="ace">
-                                    <span class="lbl"> Direct</span>
+                                    <input name="status_pegawai" type="radio" class="ace" {{ $item->code == '1' ?
+                                    'checked' :
+                                    '' }} value="{{ $item->code }}">
+                                    <span class="lbl"> {{ $item->desc }}</span>
                                   </label>
-                                  <label>
-                                    <input name="status_pegawai" type="radio" class="ace">
-                                    <span class="lbl"> Indirect</span>
-                                  </label>
+                                  @endforeach
                                 </div>
                               </td>
                             </tr>
@@ -267,7 +292,9 @@
                                         <td class="text-right"><label style="padding-top: 7px;">Tempat Lahir</label>
                                         </td>
                                         <td><input type="text" name="tempat_lahir" class="form-control"
-                                            style="max-width: 200px;"></td>
+                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                            style="max-width: 200px;">
+                                        </td>
                                         <td class="text-right"><label style="padding-top: 7px;">Bank</label>
                                         </td>
                                         <td>
@@ -314,7 +341,8 @@
                                             Terakhir</label>
                                         </td>
                                         <td>
-                                          <select name="pendidikan" class="form-control" style="max-width: 200px;">
+                                          <select name="pendidikan" class="form-control" style="max-width: 200px;"
+                                            required>
                                             <option value="" selected disabled>Pilih Pendidikan Terakhir</option>
                                             @foreach ($data['pendidikan'] as $item)
                                             <option value="{{ $item->code }}">{{ $item->desc }}
@@ -327,33 +355,38 @@
                                         <td class="text-right"><label style="padding-top: 7px;">Status</label></td>
                                         <td>
                                           <div class="radio">
+                                            @foreach ($data['marital'] as $item)
                                             <label>
-                                              <input name="marital" type="radio" class="ace">
-                                              <span class="lbl"> Menikah</span>
+                                              <input name="marital" type="radio" class="ace" {{ $item->code == '1' ?
+                                              'checked' :
+                                              '' }} value="{{ $item->code }}">
+                                              <span class="lbl"> {{ $item->desc }}</span>
                                             </label>
-                                            <label>
-                                              <input name="marital" checked type="radio" class="ace">
-                                              <span class="lbl"> Tidak Menikah</span>
-                                            </label>
+                                            @endforeach
                                           </div>
                                         </td>
                                         <td class="text-right"><label style="padding-top: 7px;">Jurusan</label>
                                         </td>
                                         <td><input type="text" name="jurusan" class="form-control"
-                                            style="max-width: 200px;"></td>
+                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                            style="max-width: 200px;">
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td class="text-right"><label style="padding-top: 7px;">Alamat</label></td>
                                         <td colspan="2">
                                           <textarea name="alamat" rows="4" class="form-control"
-                                            style="max-width: 380px;"></textarea>
+                                            style="max-width: 380px;"
+                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"></textarea>
                                         </td>
                                       </tr>
                                       <tr>
                                         <td class="text-right"><label style="padding-top: 7px;">Kebangsaan</label>
                                         </td>
                                         <td><input type="text" name="kebangsaan" class="form-control" value="INDONESIA"
-                                            style="max-width: 200px;"></td>
+                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                            style="max-width: 200px;">
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td class="text-right"><label style="padding-top: 7px;">Agama</label>
@@ -408,6 +441,7 @@
 @section('page-js')
 <script src="{{ asset('js/select2.js') }}"></script>
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
+<script src="{{ asset('js/sweetalert2.js') }}"></script>
 <script src="{{ asset('js/nik_parse.js') }}"></script>
 <script>
   let thisYear = new Date().getFullYear();
@@ -451,8 +485,7 @@
           id_dept
         },
         success:function(response){
-          // let row = '<option value="">Pilih Divisi</option>'
-          let row = ''
+          let row = '<option value="" selected disabled>Pilih Divisi</option>'
           $.map(response, function(val, i){
             row += '<option value="'+val.id+'">'+val.divisi_name+'</option>'
           })
@@ -511,6 +544,69 @@
 
     window.location.replace("{{ route('karyawan') }}")
   })
+
+  $("#frmData").on('submit', function () {
+    event.preventDefault()
+    let formData = $("#frmData").serialize()
+    let urlPost = "{{ route('karyawan.store') }}"
+    let method = "POST"
+
+    if ($("[name='isactive']").is(":checked") == false) {
+      formData+='&isactive=0'
+    }
+    
+    ACTION_PROCESS(urlPost, formData, method)
+  })
+
+  function ACTION_PROCESS(urlPost, formData, method) {
+    $.ajax({
+      url: urlPost,
+      type: method,
+      data: formData,
+      dataType: "JSON",
+      success: function (data) {
+        // console.log(data)
+        if(data.status == 'success'){
+          Swal.fire({
+            icon: data.status,
+            text: data.message,
+            // showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+          });
+          resetForm()
+          
+        }else{
+          Swal.fire({
+            icon: data.status,
+            text: data.message,
+            allowOutsideClick: false,
+          });
+        }
+
+      },
+      error: function (datas) {
+        // console.log(datas)
+        let data = datas.responseJSON
+
+        Swal.fire({
+          icon: data.status,
+          html: data.message,
+          allowOutsideClick: false,
+        });
+      }
+    })
+  }
+
+  function resetForm(){
+    $('.select2').val(null).trigger('change');
+    $("#frmData")[0].reset()
+  }
+
+  function convertToUpperCase() {
+    var input = document.getElementById("myInput");
+    input.value = input.value.toUpperCase();
+  }
 
   function onlyNumberKey(evt) {
     let ASCIICode = (evt.which) ? evt.which : evt.keyCode

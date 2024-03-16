@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="{{ asset('css/ace.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
   <link rel="stylesheet" href="{{ asset('assets/font-awesome/4.5.0/css/font-awesome.min.css') }}" />
   @yield('page-css')
-  
+
   {{--
   <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
   <link rel="stylesheet" href="assets/css/ace-rtl.min.css" /> --}}
@@ -64,6 +64,10 @@
       100% {
         transform: rotate(360deg);
       }
+    }
+
+    .dataTables_wrapper .dataTables_filter input::-webkit-search-cancel-button {
+      -webkit-appearance: button !important;
     }
   </style>
 

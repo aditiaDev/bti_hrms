@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Conf\RoleController;
 use App\Http\Controllers\Kepegawaian\KaryawanController;
+use App\Http\Controllers\Master\DepartemenController;
 use App\Http\Controllers\Master\DivisiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,5 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/master/getDivisiByDept', [DivisiController::class, 'getDivisiByDept'])->name('master.getDivisiByDept');
 
   Route::post('/karyawan/getall', [KaryawanController::class, 'getall'])->name('karyawan.getall');
+  Route::post('/karyawan/changeStatus', [KaryawanController::class, 'changeStatus'])->name('karyawan.changeStatus');
   Route::post('/karyawan/generateNIK', [KaryawanController::class, 'generateNIK'])->name('karyawan.generateNIK');
+  Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store');
 });

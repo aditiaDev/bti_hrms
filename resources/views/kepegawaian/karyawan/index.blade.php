@@ -4,6 +4,7 @@
 {{--
 <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}"> --}}
 <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
+<link rel="stylesheet" href="{{ asset('css/select2.css') }}">
 @endsection
 
 @section('page-content')
@@ -48,21 +49,35 @@
                           <label class="col-sm-4 control-label no-padding-right"> Departemen</label>
 
                           <div class="col-sm-8">
-                            <select name="dept" class="form-control"></select>
+                            <select name="dept" class="form-control select2" style="width: 100%">
+                              <option value="">Tampilkan Semua</option>
+                              @foreach ($data['dept'] as $item)
+                              <option value="{{ $item->id }}">{{ $item->dept_name }}
+                              </option>
+                              @endforeach
+                            </select>
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="col-sm-4 control-label no-padding-right"> Divisi</label>
 
                           <div class="col-sm-8">
-                            <select name="divisi" class="form-control"></select>
+                            <select name="divisi" class="form-control select2" style="width: 100%">
+                              <option value="">Tampilkan Semua</option>
+                            </select>
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="col-sm-4 control-label no-padding-right"> Jabatan</label>
 
                           <div class="col-sm-8">
-                            <select name="jabatan" class="form-control"></select>
+                            <select name="jabatan" class="form-control select2" style="width: 100%">
+                              <option value="">Tampilkan Semua</option>
+                              @foreach ($data['jabatan'] as $item)
+                              <option value="{{ $item->id }}">{{ $item->jabatan_name }}
+                              </option>
+                              @endforeach
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -141,7 +156,7 @@
                 <div class="row">
                   <div class="col-xs-12 col-md-12">
                     <div style="overflow-x: auto;">
-                      <table id="tb_data" class="table table-bordered table-hover">
+                      <table id="tb_data" class="table table-bordered table-hover" style="width: 100%">
                         <thead>
                           <tr>
                             <th>Nama</th>
@@ -198,10 +213,13 @@
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 {{-- <script src="{{ asset('js/dataTables.responsive.js') }}"></script> --}}
 <script src="{{ asset('js/sweetalert2.js') }}"></script>
+<script src="{{ asset('js/select2.js') }}"></script>
 <script>
   var action
   var tb_data
   let id_data
+
+  $(".select2").select2()
 
   $.ajaxSetup({
     headers: {
@@ -210,12 +228,12 @@
   });
 
   $(document).ajaxStart(function(){
-      $('#overlay').fadeIn(300);
-    });
-    // AJAX request ends, hide loader
-    $(document).ajaxStop(function(){
-      $('#overlay').fadeOut(500);
-    });
+    $('#overlay').fadeIn(300);
+  });
+
+  $(document).ajaxStop(function(){
+    $('#overlay').fadeOut(500);
+  });
 
   function REFRESH_DATA() {
 
@@ -269,9 +287,9 @@
           "render": function (data) {
             let row = "<button class='btn btn-xs btn-warning' title='Edit Data' onclick='editData(" + JSON.stringify(data) + ");'>Edit</button> "
             if(data.isactive == 1){
-              row += "<button class='btn btn-xs btn-danger' title='Deactivate Data' onclick='actActivate(0, \"" + data.id + "\");'>Deactivate</button>"
+              row += "<button class='btn btn-xs btn-danger' title='Deactivate Data' onclick='changeStatus(0, \"" + data.id + "\");'>Deactivate</button>"
             }else{
-              row += "<button class='btn btn-xs btn-info' title='Activate Data' onclick='actActivate(1, \"" + data.id + "\");'>Activate</button>"
+              row += "<button class='btn btn-xs btn-info' title='Activate Data' onclick='changeStatus(1, \"" + data.id + "\");'>Activate</button>"
             }
             return row
           },
@@ -284,7 +302,64 @@
 
   REFRESH_DATA()
 
+  function changeStatus(act, id){
+    if (!confirm('Proses data ini?')) return
+      urlPost = "{{ route('karyawan.changeStatus') }}";
+      formData = "act="+act+"&id="+id
+      method = "POST"
+      ACTION_PROCESS(urlPost, formData, method)
+  }
 
+  function ACTION_PROCESS(urlPost, formData, method) {
+    $.ajax({
+      url: urlPost,
+      type: method,
+      data: formData,
+      dataType: "JSON",
+      success: function (data) {
+        // console.log(data)
+        Swal.fire({
+          icon: data.status,
+          text: data.message,
+          // showConfirmButton: false,
+          timer: 5000
+        });
+        REFRESH_DATA()
+      },
+      error: function (datas) {
+        console.log(datas)
+        let data = datas.responseJSON
+        // alert('Error Save Data')
+        Swal.fire({
+          icon: data.status,
+          html: data.message,
+        });
+      }
+    })
+  }
+
+  $("[name='dept']").change(function(){
+    var id_dept = $(this).val(); 
+    if(id_dept){
+      $.ajax({
+        type: "POST",
+        url: "{{ route('master.getDivisiByDept') }}", 
+        data:{
+          id_dept
+        },
+        success:function(response){
+          let row = '<option value="" selected disabled>Pilih Divisi</option>'
+          row += '<option value="" >Tampilkan Semua</option>'
+          $.map(response, function(val, i){
+            row += '<option value="'+val.id+'">'+val.divisi_name+'</option>'
+          })
+          $("[name='divisi']").html(row); 
+        }
+      });
+    }else{
+      $("[name='divisi']").html('<option value="">Pilih Divisi</option>'); 
+    }
+  })
 </script>
 
 @endsection
