@@ -5,6 +5,12 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.dataTables.css') }}"> --}}
 <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
 <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
+<link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
+<style>
+  .text-middle {
+    vertical-align: middle !important;
+  }
+</style>
 @endsection
 
 @section('page-content')
@@ -192,6 +198,7 @@
                       <table id="tb_data" class="table table-bordered table-hover" style="width: 100%">
                         <thead>
                           <tr>
+                            <th></th>
                             <th>Nama</th>
                             <th>NIK</th>
                             <th>Departemen</th>
@@ -219,23 +226,117 @@
 <!-- staticBackdrop Modal -->
 <div class="modal fade" id="modalEmpTransfer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">Add New Data</h4>
+        <h4 class="modal-title">Employee Transfer</h4>
       </div>
-      <form id="frmData">
+      <form id="frmEmpTransfer">
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12 col-md-12">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> NIK Baru</label>
 
+                  <div class="col-sm-4">
+                    <input type="text" name="nik_baru" class="form-control" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Tgl Mutasi</label>
+
+                  <div class="col-sm-4">
+                    <input type="text" name="tglmutasi" class="form-control datepicker" value="{{ date('Y-m-d') }}"
+                      required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Dept Baru</label>
+
+                  <div class="col-sm-6">
+                    <select name="dept_baru" class="form-control select2" style="width: 100%" required>
+                      <option value="" disabled>Pilih Departemen</option>
+                      @foreach ($data['dept'] as $item)
+                      <option value="{{ $item->id }}">{{ $item->dept_name }}
+                      </option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Divisi Baru</label>
+
+                  <div class="col-sm-6">
+                    <select name="divisi_baru" class="form-control select2" style="width: 100%" required>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Jabatan Baru</label>
+
+                  <div class="col-sm-6">
+                    <select name="jabatan_baru" class="form-control select2" style="width: 100%" required>
+                      <option value="">Tampilkan Semua</option>
+                      @foreach ($data['jabatan'] as $item)
+                      <option value="{{ $item->id }}">{{ $item->jabatan_name }}
+                      </option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Status Kepegawaian Baru</label>
+
+                  <div class="col-sm-8">
+                    <div class="radio">
+                      @foreach ($data['status_kepegawaian'] as $item)
+                      <label>
+                        <input name="status_kepegawaian_baru" type="radio" class="ace" value="{{ $item->code }}">
+                        <span class="lbl"> {{ $item->desc }}</span>
+                      </label>
+                      @endforeach
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Status Pekerja Baru</label>
+
+                  <div class="col-sm-8">
+                    <div class="radio">
+                      @foreach ($data['status_pegawai'] as $item)
+                      <label>
+                        <input name="status_pegawai_baru" type="radio" class="ace" value="{{ $item->code }}">
+                        <span class="lbl"> {{ $item->desc }}</span>
+                      </label>
+                      @endforeach
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Tipe Mutasi</label>
+
+                  <div class="col-sm-8">
+                    <div class="radio">
+                      @foreach ($data['emp_trans_type'] as $item)
+                      <label>
+                        <input name="type" type="radio" class="ace" {{ $item->code == '0' ?
+                        'checked' :
+                        '' }} value="{{ $item->code }}">
+                        <span class="lbl"> {{ $item->desc }}</span>
+                      </label>
+                      @endforeach
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary">OK</button>
+          <button type="submit" class="btn btn-primary">Save</button>
         </div>
       </form>
     </div>
@@ -245,14 +346,26 @@
 @section('page-js')
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 {{-- <script src="{{ asset('js/dataTables.responsive.js') }}"></script> --}}
+<script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script src="{{ asset('js/sweetalert2.js') }}"></script>
 <script src="{{ asset('js/select2.js') }}"></script>
+<script src="{{ asset('js/jquery.checkboxes.js') }}"></script>
 <script>
   var action
   var tb_data
   let id_data
 
   $(".select2").select2()
+
+  $(".datepicker").datepicker({
+    changeMonth: true,
+    changeYear: true,
+    dateFormat: "yy-mm-dd",
+  })
+
+  jQuery(function($) {
+    $('#tb_data').checkboxes('max', 1);
+  });
 
   $.ajaxSetup({
     headers: {
@@ -288,7 +401,7 @@
           d.form = frmFilter
         },
         "beforeSend": function(request) {
-          request.setRequestHeader("X-CSRFToken", $('meta[name="csrf-token"]').attr('content') );
+          request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content') );
         },
         "headers": {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -303,6 +416,13 @@
       //   { width: '150px', targets: 3 },
       // ],
       "columns": [
+        { 
+          "data": "id",
+          className: "text-center text-middle",
+          "render": function(data){
+            return '<input type="checkbox" name="selectID[]" class="chkID" value="'+data+'" >'
+          }
+        },
         { "data": "nama" },
         {"data": "nik", className: "text-center"},
         { "data": "dept_name" },
@@ -414,7 +534,70 @@
   }
 
   $("#btnEmpTransfer").click(function(){
+    let rowcollection =  tb_data.$(".chkID:checked", {"page": "all"});
+    
+    if(rowcollection.length < 1){
+      alert("Pilih Karyawan yg akan di Transfer")
+      return
+    }
+
+    let arrData = [];
+    rowcollection.each(function(index,elem){
+      arrData.push($(elem).val());
+    });
+
+    let jsonData = JSON.stringify(arrData);
+
+    $.ajax({
+      url: "{{ route('karyawan.getById') }}",
+      type: "POST",
+      dataType: "JSON",
+      data: {
+        id_emp: jsonData
+      },
+      success: function(result){
+
+        $.map(result['data'], function(val, i){
+
+          $("[name='nik_baru']").val(val.nik)
+          $("[name='dept_baru']").val(val.id_departemen).trigger('change')
+          $("[name='jabatan_baru']").val(val.id_jabatan).trigger('change')
+          $("input[name=status_kepegawaian_baru][value='"+val.status_kepegawaian+"']").prop('checked', true);
+          $("input[name=status_pegawai_baru][value='"+val.status_pegawai+"']").prop('checked', true);
+          
+          setTimeout(() => {
+            $("[name='divisi_baru']").val(val.id_divisi).trigger('change')
+          }, 500);
+
+        })
+      },
+    })
+
+
     $("#modalEmpTransfer").modal('show')
+  })
+
+  $("[name='dept_baru']").change(function(){
+    var id_dept = $(this).val(); 
+    $("[name='divisi_baru']").val(null).trigger('change')
+    if(id_dept){
+      $.ajax({
+        type: "POST",
+        url: "{{ route('master.getDivisiByDept') }}", 
+        data:{
+          id_dept
+        },
+        success:function(response){
+          let row = '<option value="" selected disabled>Pilih Divisi</option>'
+          $.map(response, function(val, i){
+            row += '<option value="'+val.id+'">'+val.divisi_name+'</option>'
+          })
+          $("[name='divisi_baru']").html(row); 
+        }
+      });
+    }else{
+      $("[name='divisi_baru']").html('<option value="">Pilih Divisi</option>'); 
+    }
   })
   
 </script>

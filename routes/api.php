@@ -35,4 +35,5 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/karyawan/generateNIK', [KaryawanController::class, 'generateNIK'])->name('karyawan.generateNIK');
   Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store');
   Route::put('/karyawan/{post}/update', [KaryawanController::class, 'update'])->name('karyawan.update');
+  Route::post('/karyawan/getById', [KaryawanController::class, 'getById'])->name('karyawan.getById');
 });

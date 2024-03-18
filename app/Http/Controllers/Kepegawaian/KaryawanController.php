@@ -23,6 +23,7 @@ class KaryawanController extends Controller
 		$jabatan = Jabatan::select('id', 'jabatan_name')->where('isactive', 1)->orderBy('jabatan_name')->get();
 		$status_kepegawaian = MasterCode::select('code', 'desc')->where('type', 'STATUS KEPEGAWAIAN')->orderBy('id')->get();
 		$status_pegawai = MasterCode::select('code', 'desc')->where('type', 'STATUS PEGAWAI')->orderBy('id')->get();
+		$emp_trans_type = MasterCode::select('code', 'desc')->where('type', 'EMPLOYEE TRANS TYPE')->orderBy('id')->get();
 
 		$data = [
 			'parent-menu' => "Kepegawaian",
@@ -32,6 +33,7 @@ class KaryawanController extends Controller
 			'jabatan' => $jabatan,
 			'status_kepegawaian' => $status_kepegawaian,
 			'status_pegawai' => $status_pegawai,
+			'emp_trans_type' => $emp_trans_type,
 		];
 		return view('kepegawaian.karyawan.index')->with('data', $data);
 	}
@@ -337,7 +339,48 @@ class KaryawanController extends Controller
 		}
 	}
 
+	public function getById(Request $request)
+	{
+		$id_emp = json_decode($request->id_emp);
+
+		$data = DB::table('master_karyawan AS A')
+			->select(
+				'A.id',
+				'A.nik',
+				'A.id_departemen',
+				'A.id_divisi',
+				'A.id_jabatan',
+				'A.status_kepegawaian',
+				'A.status_pegawai'
+			)
+			->whereIn(DB::raw('md5(id)'), $id_emp)
+			->get();
+
+		return json_encode(array('data' => $data));
+	}
+
 	public function employee_transfer(Request $request, $id)
 	{
+		$validator = Validator::make($request->all(), [
+			'nik_baru' => 'required',
+			'dept_baru' => 'required',
+			'divisi_baru' => 'required',
+			'jabatan_baru' => 'required',
+			'tglmutasi' => 'required',
+			'status_kepegawaian_baru' => 'required',
+			'status_pegawai_baru' => 'required',
+			'type' => 'required',
+		]);
+
+		if ($validator->fails()) {
+			$errorMessage = $this->getMessageAsString($validator->errors());
+			return response()->json(['status' => 'error', 'message' => $errorMessage], 400);
+		}
+
+		try {
+			//code...
+		} catch (\Illuminate\Database\QueryException $e) {
+			return response()->json(['status' => 'error', 'message' => 'Error Updating Data, ' . $e->errorInfo[2]], 200);
+		}
 	}
 }
