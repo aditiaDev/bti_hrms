@@ -62,7 +62,7 @@
         <li class="active">{{ $data['child-menu'] }}</li>
       </ul>
     </div>
-
+    @foreach ($data['datas'] as $row)
     <div class="page-content">
       <div class="row">
         <div class="col-xs-12 col-md-12">
@@ -95,6 +95,7 @@
                               <td style="min-width: 150px;width:300px;">
                                 <div class="form-inline">
                                   <input type="text" name="nik" class="form-control" style="width: 150px;"
+                                    value="{{ $row->nik }}"
                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                     required>
                                   <button type="button" id="genNIK" class="btn btn-sm btn-danger">
@@ -109,6 +110,7 @@
                               <td class="text-right"><label style="padding-top: 7px;">Nama</label></td>
                               <td>
                                 <input type="text" name="nama" class="form-control" style="max-width: 300px;"
+                                  value="{{ $row->nama }}"
                                   oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                   required>
                               </td>
@@ -116,7 +118,7 @@
                                 <div class="checkbox">
                                   <label>
                                     <input name="isactive" class="ace ace-switch ace-switch-4 btn-rotate"
-                                      type="checkbox" value="1" checked>
+                                      type="checkbox" value="1" {{ $row->isactive == '1' ? 'checked' : '' }}>
 
                                     <span class="lbl"></span>
                                   </label>
@@ -128,9 +130,10 @@
                               <td>
                                 <select name="id_departemen" class="form-control select2" style="max-width: 250px;"
                                   required>
-                                  <option value="" selected disabled>Pilih Departemen</option>
+                                  <option value="" disabled>Pilih Departemen</option>
                                   @foreach ($data['dept'] as $item)
-                                  <option value="{{ $item->id }}">{{ $item->dept_name }}</option>
+                                  <option value="{{ $item->id }}" {{ $row->id_departemen == $item->id ? 'selected' : ''
+                                    }} >{{ $item->dept_name }}</option>
                                   @endforeach
                                 </select>
                               </td>
@@ -138,7 +141,8 @@
                                 <div class="radio">
                                   @foreach ($data['status_kepegawaian'] as $item)
                                   <label>
-                                    <input name="status_kepegawaian" type="radio" class="ace" {{ $item->code == '2' ?
+                                    <input name="status_kepegawaian" type="radio" class="ace" {{ $item->code ==
+                                    $row->status_kepegawaian ?
                                     'checked' :
                                     '' }} value="{{ $item->code }}">
                                     <span class="lbl"> {{ $item->desc }}</span>
@@ -152,14 +156,19 @@
                               <td>
                                 <select name="id_divisi" class="form-control select2" style="max-width: 250px;"
                                   required>
-                                  <option value="" selected disabled>Pilih Divisi</option>
+                                  <option value="" disabled>Pilih Divisi</option>
+                                  @foreach ($data['divisi'] as $item)
+                                  <option value="{{ $item->id }}" {{ $row->id_divisi == $item->id ? 'selected' : ''
+                                    }} >{{ $item->divisi_name }}</option>
+                                  @endforeach
                                 </select>
                               </td>
                               <td>
                                 <div class="radio">
                                   @foreach ($data['status_pegawai'] as $item)
                                   <label>
-                                    <input name="status_pegawai" type="radio" class="ace" {{ $item->code == '1' ?
+                                    <input name="status_pegawai" type="radio" class="ace" {{ $item->code ==
+                                    $row->status_pegawai ?
                                     'checked' :
                                     '' }} value="{{ $item->code }}">
                                     <span class="lbl"> {{ $item->desc }}</span>
@@ -173,9 +182,10 @@
                               <td>
                                 <select name="id_jabatan" class="form-control select2" style="max-width: 250px;"
                                   required>
-                                  <option value="" selected disabled>Pilih Jabatan</option>
+                                  <option value="" disabled>Pilih Jabatan</option>
                                   @foreach ($data['jabatan'] as $item)
-                                  <option value="{{ $item->id }}">{{ $item->jabatan_name }}</option>
+                                  <option value="{{ $item->id }}" {{ $row->id_jabatan == $item->id ? 'selected' : ''
+                                    }}>{{ $item->jabatan_name }}</option>
                                   @endforeach
                                 </select>
                               </td>
@@ -185,7 +195,7 @@
                               <td>
                                 <div class="input-group" style="width: 150px;">
                                   <input type="text" name="tglmasuk" class="form-control datepicker"
-                                    value="{{ date('Y-m-d') }}" required>
+                                    value="{{ $row->tglmasuk }}" required>
                                   <span class="input-group-addon">
                                     <i class="ace-icon fa fa-calendar"></i>
                                   </span>
@@ -200,8 +210,8 @@
                                     <i class="ace-icon fa fa-phone"></i>
                                   </span>
 
-                                  <input type="text" name="notelp" onkeypress="return onlyNumberKey(event)"
-                                    class="form-control">
+                                  <input type="text" name="notelp" value="{{ $row->notelp }}"
+                                    onkeypress="return onlyNumberKey(event)" class="form-control">
                                 </div>
                               </td>
                             </tr>
@@ -213,7 +223,7 @@
                                     <i class="ace-icon fa fa-envelope-o"></i>
                                   </span>
 
-                                  <input type="email" name="email" class="form-control">
+                                  <input type="email" name="email" value="{{ $row->email }}" class="form-control">
                                 </div>
                               </td>
                             </tr>
@@ -221,9 +231,11 @@
                               <td class="text-right"><label style="padding-top: 7px;">Lembur Kelas</label></td>
                               <td>
                                 <select name="lembur_kelas" class="form-control" required>
-                                  <option value="" selected disabled>Pilih Lembur Kelas dibayar</option>
+                                  <option value="" disabled>Pilih Lembur Kelas dibayar</option>
                                   @foreach ($data['lembur_kelas'] as $item)
-                                  <option value="{{ $item->code }}">{{ $item->code }} - {{ $item->desc }}</option>
+                                  <option value="{{ $item->code }}" {{ $row->lembur_kelas == $item->code ? 'selected' :
+                                    ''
+                                    }}>{{ $item->code }} - {{ $item->desc }}</option>
                                   @endforeach
                                 </select>
                               </td>
@@ -257,7 +269,8 @@
                                           <div class="radio">
                                             @foreach ($data['tipeID'] as $item)
                                             <label>
-                                              <input name="tipeID" type="radio" class="ace" {{ $item->code == '1' ?
+                                              <input name="tipeID" type="radio" class="ace" {{ $item->code ==
+                                              $row->tipeID ?
                                               'checked' :
                                               '' }} value="{{ $item->code }}">
                                               <span class="lbl"> {{ $item->desc }}</span>
@@ -267,22 +280,24 @@
                                         </td>
                                         <td class="text-right"><label style="padding-top: 7px;">N.P.W.P.</label></td>
                                         <td>
-                                          <input type="text" name="npwp" class="form-control" style="width: 200px;">
+                                          <input type="text" name="npwp" class="form-control" style="width: 200px;"
+                                            value="{{ $row->npwp }}">
                                         </td>
                                       </tr>
                                       <tr>
                                         <td class="text-right"><label style="padding-top: 7px;">No.</label></td>
                                         <td>
-                                          <input type="text" name="noID" class="form-control" required
-                                            style="width: 160px;" onkeypress="return onlyNumberKey(event)">
+                                          <input type="text" name="noID" class="form-control" value="{{ $row->noID }}"
+                                            required style="width: 160px;" onkeypress="return onlyNumberKey(event)">
                                         </td>
                                         <td class="text-right"><label style="padding-top: 7px;">Status Pajak</label>
                                         </td>
                                         <td>
                                           <select name="status_pajak" class="form-control" style="max-width: 200px;">
-                                            <option value="" selected disabled>Pilih Status Pajak</option>
+                                            <option value="">Pilih Status Pajak</option>
                                             @foreach ($data['status_pajak'] as $item)
-                                            <option value="{{ $item->code }}">{{ $item->code }} - {{ $item->desc }}
+                                            <option value="{{ $item->code }}" {{ $item->code == $row->status_pajak ?
+                                              'selected' : '' }}>{{ $item->code }} - {{ $item->desc }}
                                             </option>
                                             @endforeach
                                           </select>
@@ -292,6 +307,7 @@
                                         <td class="text-right"><label style="padding-top: 7px;">Tempat Lahir</label>
                                         </td>
                                         <td><input type="text" name="tempat_lahir" class="form-control"
+                                            value="{{ $row->tempat_lahir }}"
                                             oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             style="max-width: 200px;">
                                         </td>
@@ -300,9 +316,10 @@
                                         <td>
                                           <select name="bank_company" class="form-control select2"
                                             style="max-width: 200px;">
-                                            <option value="" selected disabled>Pilih Bank Company</option>
+                                            <option value="">Pilih Bank Company</option>
                                             @foreach ($data['bank'] as $item)
-                                            <option value="{{ $item->code }}">{{ $item->desc }}
+                                            <option value="{{ $item->code }}" {{ $item->code == $row->bank_company ?
+                                              'selected' : '' }}>{{ $item->desc }}
                                             </option>
                                             @endforeach
                                           </select>
@@ -312,7 +329,8 @@
                                         <td class="text-right"><label style="padding-top: 7px;">Tgl Lahir</label></td>
                                         <td>
                                           <div class="input-group" style="width: 150px;">
-                                            <input type="text" name="tgllahir" class="form-control" required>
+                                            <input type="text" name="tgllahir" class="form-control"
+                                              value="{{ $row->tgllahir }}" required>
                                             <span class="input-group-addon">
                                               <i class="ace-icon fa fa-calendar"></i>
                                             </span>
@@ -321,31 +339,32 @@
                                         <td class="text-right"><label style="padding-top: 7px;">No. Rekening</label>
                                         </td>
                                         <td><input type="text" name="no_rekening" class="form-control"
-                                            style="max-width: 200px;"></td>
+                                            value="{{ $row->no_rekening }}" style="max-width: 200px;"></td>
                                       </tr>
                                       <tr>
                                         <td class="text-right"><label style="padding-top: 7px;">Gender</label></td>
                                         <td>
                                           <div class="radio">
+                                            @foreach ($data['gender'] as $item)
                                             <label>
-                                              <input name="gender" checked type="radio" class="ace" value="1">
-                                              <span class="lbl"> Laki-laki</span>
+                                              <input name="gender" type="radio" class="ace" {{ $item->code ==
+                                              $row->gender ?
+                                              'checked' :
+                                              '' }} value="{{ $item->code }}">
+                                              <span class="lbl"> {{ $item->desc }}</span>
                                             </label>
-                                            <label>
-                                              <input name="gender" type="radio" class="ace" value="2">
-                                              <span class="lbl"> Perempuan</span>
-                                            </label>
+                                            @endforeach
                                           </div>
                                         </td>
-                                        <td class="text-right"><label style="padding-top: 7px;">Pendidikan
-                                            Terakhir</label>
+                                        <td class="text-right">
+                                          <label style="padding-top: 7px;">Pendidikan Terakhir</label>
                                         </td>
                                         <td>
                                           <select name="pendidikan" class="form-control" style="max-width: 200px;">
-                                            <option value="" selected disabled>Pilih Pendidikan Terakhir</option>
+                                            <option value="">Pilih Pendidikan Terakhir</option>
                                             @foreach ($data['pendidikan'] as $item)
-                                            <option value="{{ $item->code }}">{{ $item->desc }}
-                                            </option>
+                                            <option value="{{ $item->code }}" {{ $item->code == $row->pendidikan ?
+                                              'selected' : '' }}>{{ $item->desc }}</option>
                                             @endforeach
                                           </select>
                                         </td>
@@ -356,7 +375,8 @@
                                           <div class="radio">
                                             @foreach ($data['marital'] as $item)
                                             <label>
-                                              <input name="marital" type="radio" class="ace" {{ $item->code == '1' ?
+                                              <input name="marital" type="radio" class="ace" {{ $item->code ==
+                                              $row->marital ?
                                               'checked' :
                                               '' }} value="{{ $item->code }}">
                                               <span class="lbl"> {{ $item->desc }}</span>
@@ -367,6 +387,7 @@
                                         <td class="text-right"><label style="padding-top: 7px;">Jurusan</label>
                                         </td>
                                         <td><input type="text" name="jurusan" class="form-control"
+                                            value="{{ $row->jurusan }}"
                                             oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             style="max-width: 200px;">
                                         </td>
@@ -375,14 +396,14 @@
                                         <td class="text-right"><label style="padding-top: 7px;">Alamat</label></td>
                                         <td colspan="2">
                                           <textarea name="alamat" rows="4" class="form-control"
-                                            style="max-width: 380px;"
-                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"></textarea>
+                                            style="max-width: 380px;">{{ $row->alamat }}</textarea>
                                         </td>
                                       </tr>
                                       <tr>
                                         <td class="text-right"><label style="padding-top: 7px;">Kebangsaan</label>
                                         </td>
-                                        <td><input type="text" name="kebangsaan" class="form-control" value="INDONESIA"
+                                        <td><input type="text" name="kebangsaan" class="form-control"
+                                            value="{{ $row->kebangsaan }}"
                                             oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             style="max-width: 200px;">
                                         </td>
@@ -392,8 +413,10 @@
                                         </td>
                                         <td>
                                           <select name="agama" class="form-control" style="max-width: 200px;">
+                                            <option value="">Pilih Agama</option>
                                             @foreach ($data['agama'] as $item)
-                                            <option value="{{ $item->code }}" {{ $item->code == 'ISLAM' ? 'selected' :
+                                            <option value="{{ $item->code }}" {{ $item->code == $row->agama ? 'selected'
+                                              :
                                               '' }}>{{ $item->desc }}
                                             </option>
                                             @endforeach
@@ -433,6 +456,7 @@
         </div>
       </div>
     </div>
+    @endforeach
   </div>
 </div>
 
@@ -441,7 +465,7 @@
 <script src="{{ asset('js/select2.js') }}"></script>
 <script src="{{ asset('js/jquery-ui.js') }}"></script>
 <script src="{{ asset('js/sweetalert2.js') }}"></script>
-<script src="{{ asset('js/nik_parse.js') }}"></script>
+
 <script>
   let thisYear = new Date().getFullYear();
   let fiftyYearsAgo = thisYear - 50;
@@ -475,6 +499,7 @@
   });
   
   $("[name='id_departemen']").change(function(){
+    $("[name='id_divisi']").val(null).trigger('change');
     var id_dept = $(this).val(); 
     if(id_dept){
       $.ajax({
@@ -494,29 +519,6 @@
     }else{
       $("[name='id_divisi']").html('<option value="">Pilih Divisi</option>'); 
     }
-  })
-
-  $("[name='noID']").change(function(){
-    if($("[name='tipeID']:checked").val() != 1) return
-
-    let nik = $(this).val()
-    nikParse(nik, function (result) {
-      if(result.status != 'success') return
-
-      let alamat = '\nKECAMATAN '+result.data.kecamatan+', '+result.data.kotakab+', PROVINSI '+result.data.provinsi
-      let tgllahir = changeDateFormat(result.data.lahir)
-      let tempat_lahir = result.data.kotakab.replace("KAB. ", "")
-      tempat_lahir = tempat_lahir.replace("KOTA", "")
-      let gender = 1
-      if(result.data.kelamin != "LAKI-LAKI"){
-        gender = 2
-      }
-
-      $("[name='gender']").val([gender])
-      $("[name='tgllahir']").val(tgllahir)
-      $("[name='tempat_lahir']").val(tempat_lahir)
-      $("[name='alamat']").val(alamat)
-    })
   })
 
   $("#genNIK").click(function(){
@@ -547,13 +549,13 @@
   $("#frmData").on('submit', function () {
     event.preventDefault()
     let formData = $("#frmData").serialize()
-    let urlPost = "{{ route('karyawan.store') }}"
-    let method = "POST"
+    let urlPost = "{{ route('karyawan.update', $data['id']) }}"
+    let method = "PUT"
 
     if ($("[name='isactive']").is(":checked") == false) {
       formData+='&isactive=0'
     }
-    
+
     ACTION_PROCESS(urlPost, formData, method)
   })
 
@@ -574,7 +576,9 @@
             timerProgressBar: true,
           });
           resetForm()
-          
+          setTimeout(() => {
+            window.location.href = "{{ route('karyawan') }}";
+          }, 3000);
         }else{
           Swal.fire({
             icon: data.status,

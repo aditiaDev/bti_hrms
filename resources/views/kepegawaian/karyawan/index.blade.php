@@ -42,91 +42,109 @@
 
               <div class="panel-collapse collapse" id="collapseOne">
                 <div class="panel-body">
-                  <div class="row">
-                    <div class="col-xs-12 col-md-4">
-                      <form id="frmFilter" class="form-horizontal">
-                        <div class="form-group">
-                          <label class="col-sm-4 control-label no-padding-right"> Departemen</label>
+                  <form id="frmFilter">
+                    <div class="row">
+                      <div class="col-xs-12 col-md-3">
+                        <div class="form-horizontal">
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right"> Departemen</label>
 
-                          <div class="col-sm-8">
-                            <select name="dept" class="form-control select2" style="width: 100%">
-                              <option value="">Tampilkan Semua</option>
-                              @foreach ($data['dept'] as $item)
-                              <option value="{{ $item->id }}">{{ $item->dept_name }}
-                              </option>
-                              @endforeach
-                            </select>
+                            <div class="col-sm-8">
+                              <select name="dept" class="form-control select2" style="width: 100%">
+                                <option value="">Tampilkan Semua</option>
+                                @foreach ($data['dept'] as $item)
+                                <option value="{{ $item->id }}">{{ $item->dept_name }}
+                                </option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right"> Divisi</label>
+
+                            <div class="col-sm-8">
+                              <select name="divisi" class="form-control select2" style="width: 100%">
+                                <option value="">Tampilkan Semua</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right"> Jabatan</label>
+
+                            <div class="col-sm-8">
+                              <select name="jabatan" class="form-control select2" style="width: 100%">
+                                <option value="">Tampilkan Semua</option>
+                                @foreach ($data['jabatan'] as $item)
+                                <option value="{{ $item->id }}">{{ $item->jabatan_name }}
+                                </option>
+                                @endforeach
+                              </select>
+                            </div>
                           </div>
                         </div>
-                        <div class="form-group">
-                          <label class="col-sm-4 control-label no-padding-right"> Divisi</label>
+                      </div>
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-horizontal">
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label no-padding-right"> Status Kepegawaian</label>
 
-                          <div class="col-sm-8">
-                            <select name="divisi" class="form-control select2" style="width: 100%">
-                              <option value="">Tampilkan Semua</option>
-                            </select>
+                            <div class="col-sm-7">
+                              <select name="status_kepegawaian" class="form-control">
+                                <option value="">Tampilkan Semua</option>
+                                @foreach ($data['status_kepegawaian'] as $item)
+                                <option value="{{ $item->code }}">{{ $item->desc }}
+                                </option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label no-padding-right"> Status Pekerja</label>
+
+                            <div class="col-sm-7">
+                              <select name="status_pegawai" class="form-control">
+                                <option value="">Tampilkan Semua</option>
+                                @foreach ($data['status_pegawai'] as $item)
+                                <option value="{{ $item->code }}">{{ $item->desc }}
+                                </option>
+                                @endforeach
+                              </select>
+                            </div>
                           </div>
                         </div>
+                      </div>
+                      <div class="col-xs-12 col-md-3">
                         <div class="form-group">
-                          <label class="col-sm-4 control-label no-padding-right"> Jabatan</label>
-
-                          <div class="col-sm-8">
-                            <select name="jabatan" class="form-control select2" style="width: 100%">
-                              <option value="">Tampilkan Semua</option>
-                              @foreach ($data['jabatan'] as $item)
-                              <option value="{{ $item->id }}">{{ $item->jabatan_name }}
-                              </option>
-                              @endforeach
-                            </select>
-                          </div>
+                          <label>
+                            <input name="isactive" type="radio" class="ace" checked value="1">
+                            <span class="lbl"> Active</span>
+                          </label>
+                          <label style="margin-left: 10px;">
+                            <input name="isactive" type="radio" class="ace" value="0">
+                            <span class="lbl"> Not Active</span>
+                          </label>
+                          <label style="margin-left: 10px;">
+                            <input name="isactive" type="radio" class="ace" value="">
+                            <span class="lbl"> Semua</span>
+                          </label>
                         </div>
-                      </form>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                      <div class="form-horizontal">
-                        <div class="form-group">
-                          <label class="col-sm-5 control-label no-padding-right"> Status Kepegawaian</label>
-
-                          <div class="col-sm-7">
-                            <select name="status_kepegawaian" class="form-control">
-                              <option value="">Tampilkan Semua</option>
-                              @foreach ($data['status_kepegawaian'] as $item)
-                              <option value="{{ $item->code }}">{{ $item->desc }}
-                              </option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="col-sm-5 control-label no-padding-right"> Status Pekerja</label>
-
-                          <div class="col-sm-7">
-                            <select name="status_pekerja" class="form-control">
-                              <option value="">Tampilkan Semua</option>
-                              @foreach ($data['status_pegawai'] as $item)
-                              <option value="{{ $item->code }}">{{ $item->desc }}
-                              </option>
-                              @endforeach
-                            </select>
+                      </div>
+                      <div class="col-xs-12 col-md-2">
+                        <div class="form-horizontal">
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <button type="button" id="btnFilter" class="btn btn-info btn-sm">
+                                <i class="ace-icon fa fa-filter bigger-110"></i>Filter
+                              </button>
+                              <button type="button" id="btnClearFilter" class="btn btn-default btn-sm">
+                                <i class="ace-icon fa fa-times bigger-110"></i>Clear Filter
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-xs-12 col-md-4">
-                      <div class="form-horizontal">
-                        <div class="form-group">
-                          <div class="col-sm-12">
-                            <button type="button" id="btnFilter" class="btn btn-info btn-sm">
-                              <i class="ace-icon fa fa-filter bigger-110"></i>Filter
-                            </button>
-                            <button type="button" class="btn btn-default btn-sm">
-                              <i class="ace-icon fa fa-times bigger-110"></i>Clear Filter
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -199,7 +217,7 @@
 </div>
 
 <!-- staticBackdrop Modal -->
-{{-- <div class="modal fade" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="modalEmpTransfer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -222,7 +240,7 @@
       </form>
     </div>
   </div>
-</div> --}}
+</div>
 @endsection
 @section('page-js')
 <script src="{{ asset('js/datatables.min.js') }}"></script>
@@ -307,7 +325,7 @@
         {
           "data": null,
           "render": function (data) {
-            let row = "<button class='btn btn-xs btn-warning' title='Edit Data' onclick='editData(" + JSON.stringify(data) + ");'>Edit</button> "
+            let row = "<button class='btn btn-xs btn-warning' title='Edit Data' onclick='editData(\"" + data.id + "\");'>Edit</button> "
             if(data.isactive == 1){
               row += "<button class='btn btn-xs btn-danger' title='Deactivate Data' onclick='changeStatus(0, \"" + data.id + "\");'>Deactivate</button>"
             }else{
@@ -385,6 +403,20 @@
   $("#btnFilter").click(function(){
     REFRESH_DATA()
   })
+
+  $("#btnClearFilter").click(function(){
+    $('.select2').val(null).trigger('change');
+    $("#frmFilter")[0].reset()
+  })
+
+  function editData(id){
+    window.location.href = "{{ route('karyawan') }}" + '/' + id + '/edit'
+  }
+
+  $("#btnEmpTransfer").click(function(){
+    $("#modalEmpTransfer").modal('show')
+  })
+  
 </script>
 
 @endsection

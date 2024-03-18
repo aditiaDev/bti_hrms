@@ -35,4 +35,5 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan');
   Route::get('/karyawan/new', [KaryawanController::class, 'new'])->name('karyawan.new');
+  Route::get('/karyawan/{post}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
 });
