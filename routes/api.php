@@ -4,6 +4,8 @@ use App\Http\Controllers\Conf\RoleController;
 use App\Http\Controllers\Kepegawaian\KaryawanController;
 use App\Http\Controllers\Master\DepartemenController;
 use App\Http\Controllers\Master\DivisiController;
+use App\Http\Controllers\Master\LiburController;
+use App\Http\Controllers\Master\MShiftController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +38,10 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/karyawan/store', [KaryawanController::class, 'store'])->name('karyawan.store');
   Route::put('/karyawan/{post}/update', [KaryawanController::class, 'update'])->name('karyawan.update');
   Route::post('/karyawan/getById', [KaryawanController::class, 'getById'])->name('karyawan.getById');
+  Route::post('/karyawan/transferEmp', [KaryawanController::class, 'transferEmp'])->name('karyawan.transferEmp');
+
+  Route::post('/master/shift/gethdrall', [MShiftController::class, 'gethdrall'])->name('master.shift.gethdrall');
+  Route::post('/master/shift/getdtlbyid', [MShiftController::class, 'getdtlbyid'])->name('master.shift.getdtlbyid');
+
+  Route::post('/master/libur/getByYear', [LiburController::class, 'getByYear'])->name('master.libur.getByYear');
 });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Concerns\MessageErrorAsString;
 use App\Models\Conf\MasterCode;
+use App\Models\Kepegawaian\HistoryTransferEmp;
 use App\Models\Kepegawaian\Karyawan;
 use App\Models\Master\Departemen;
 use App\Models\Master\Divisi;
@@ -359,8 +360,10 @@ class KaryawanController extends Controller
 		return json_encode(array('data' => $data));
 	}
 
-	public function employee_transfer(Request $request, $id)
+	public function transferEmp(Request $request)
 	{
+		$id_emp = json_decode($request->id);
+
 		$validator = Validator::make($request->all(), [
 			'nik_baru' => 'required',
 			'dept_baru' => 'required',
@@ -377,8 +380,42 @@ class KaryawanController extends Controller
 			return response()->json(['status' => 'error', 'message' => $errorMessage], 400);
 		}
 
+		$emp = Karyawan::select('id', 'nik', 'id_departemen', 'id_divisi', 'id_jabatan', 'status_pegawai', 'status_kepegawaian')
+			->whereIn(DB::raw('md5(id)'), $id_emp)
+			->get();
+
 		try {
-			//code...
+			foreach ($emp as $key => $value) {
+				HistoryTransferEmp::create([
+					'id_karyawan' => $value->id,
+					'tglmutasi' => $request->tglmutasi,
+					'fr_nik' => $value->nik,
+					'to_nik' => $request->nik_baru,
+					'type' => $request->type,
+					'fr_departemen' => $value->id_departemen,
+					'fr_divisi' => $value->id_divisi,
+					'fr_jabatan' => $value->id_jabatan,
+					'fr_status_pegawai' => $value->status_pegawai,
+					'fr_status_kepegawaian' => $value->status_kepegawaian,
+					'to_departemen' => $request->dept_baru,
+					'to_divisi' => $request->divisi_baru,
+					'to_jabatan' => $request->jabatan_baru,
+					'to_status_pegawai' => $request->status_pegawai_baru,
+					'to_status_kepegawaian' => $request->status_kepegawaian_baru,
+					'note' => $request->note,
+				]);
+
+				Karyawan::where('id', $value->id)
+					->update([
+						'nik' => $request->nik_baru,
+						'id_departemen' => $request->dept_baru,
+						'id_divisi' => $request->divisi_baru,
+						'id_jabatan' => $request->jabatan_baru,
+						'status_pegawai' => $request->status_pegawai_baru,
+						'status_kepegawaian' => $request->status_kepegawaian_baru,
+					]);
+			}
+			return response()->json(['status' => 'success', 'message' => 'Data Update Successfully'], 200);
 		} catch (\Illuminate\Database\QueryException $e) {
 			return response()->json(['status' => 'error', 'message' => 'Error Updating Data, ' . $e->errorInfo[2]], 200);
 		}

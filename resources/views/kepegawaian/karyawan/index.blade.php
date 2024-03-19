@@ -224,8 +224,8 @@
 </div>
 
 <!-- staticBackdrop Modal -->
-<div class="modal fade" id="modalEmpTransfer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalEmpTransfer" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -330,6 +330,13 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label no-padding-right"> Note</label>
+
+                  <div class="col-sm-6">
+                    <textarea name="note" rows="3" class="form-control"></textarea>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -382,11 +389,16 @@
   });
 
   function REFRESH_DATA() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
     let frmFilter = $("#frmFilter").serializeArray()
 
     $('#tb_data').DataTable().destroy();
     tb_data = $("#tb_data").DataTable({
-      "ordering": false,
+      "ordering": true,
       "paging": false,
       fixedHeader: {
             header: true,
@@ -398,23 +410,34 @@
         "url": "{{ route('karyawan.getall') }}",
         "type": "POST",
         "data": function(d){
+          // d._token = $('meta[name="csrf-token"]').attr('content'),
           d.form = frmFilter
         },
         "beforeSend": function(request) {
           request.setRequestHeader("X-CSRF-TOKEN", $('meta[name="csrf-token"]').attr('content') );
         },
-        "headers": {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-        // "data": function (d) {
-        //   d._token = $('meta[name="csrf-token"]').attr('content')
-        // }
+        // "headers": {
+        //   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        // },
       },
-      // "columnDefs": [
-      //   { width: '60px', targets: 0 },
-      //   { width: '200px', targets: 1 },
-      //   { width: '150px', targets: 3 },
-      // ],
+      "columnDefs": [
+        {
+          "targets": 0,
+          "orderable": false
+        },
+        {
+          "targets": 6,
+          "orderable": false
+        },
+        {
+          "targets": 7,
+          "orderable": false
+        },
+        {
+          "targets": 8,
+          "orderable": false
+        },
+      ],
       "columns": [
         { 
           "data": "id",
@@ -548,6 +571,8 @@
 
     let jsonData = JSON.stringify(arrData);
 
+    id_data = jsonData
+
     $.ajax({
       url: "{{ route('karyawan.getById') }}",
       type: "POST",
@@ -599,6 +624,23 @@
       $("[name='divisi_baru']").html('<option value="">Pilih Divisi</option>'); 
     }
   })
+
+  $("#frmEmpTransfer").on('submit', function () {
+    event.preventDefault()
+    let formData = $(this).serialize()
+    formData += "&id="+id_data
+    let urlPost = "{{ route('karyawan.transferEmp') }}"
+    let method = "POST"
+
+    ACTION_PROCESS(urlPost, formData, method)
+    resetFormTransferEmp()
+    $("#modalEmpTransfer").modal('hide')
+  })
+
+  function resetFormTransferEmp(){
+    $('.select2').val(null).trigger('change');
+    $("#frmEmpTransfer")[0].reset()
+  }
   
 </script>
 

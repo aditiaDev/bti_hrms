@@ -70,7 +70,66 @@
 
     <li class="active open">
       <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-file-o"></i>
+        <i class="menu-icon fa fa-tasks"></i>
+
+        <span class="menu-text">
+          Data Master
+        </span>
+
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+
+      <ul class="submenu">
+        <li class="">
+          <a href="{{ route('master.shift') }}">
+            <i class="menu-icon fa fa-caret-right"></i>
+            Master Shift
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a href="{{ route('master.libur') }}">
+            <i class="menu-icon fa fa-caret-right"></i>
+            Libur & Cuti Bersama
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
+    <li class="active open">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-clock-o"></i>
+
+        <span class="menu-text">
+          Attendance
+        </span>
+
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+
+      <ul class="submenu">
+        <li class="">
+          <a href="#">
+            <i class="menu-icon fa fa-caret-right"></i>
+            Penentuan Shift
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+      </ul>
+    </li>
+
+    <li class="active open">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-cogs"></i>
 
         <span class="menu-text">
           Konfigurasi

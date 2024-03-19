@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Conf\RoleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Kepegawaian\KaryawanController;
+use App\Http\Controllers\Master\LiburController;
+use App\Http\Controllers\Master\MShiftController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,4 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan');
   Route::get('/karyawan/new', [KaryawanController::class, 'new'])->name('karyawan.new');
   Route::get('/karyawan/{post}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
+
+  Route::get('/master/shift', [MShiftController::class, 'index'])->name('master.shift');
+  Route::get('/master/libur', [LiburController::class, 'index'])->name('master.libur');
 });
