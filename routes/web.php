@@ -41,6 +41,4 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('/master/shift', [MShiftController::class, 'index'])->name('master.shift');
   Route::get('/master/libur', [LiburController::class, 'index'])->name('master.libur');
-
-  Route::get('/libur', [LiburController::class, 'getLiburAPI'])->name('libur');
 });

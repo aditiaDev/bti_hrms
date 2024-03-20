@@ -83,7 +83,7 @@
       <div class="row">
         <div class="col-xs-12 col-md-12">
           <div style="margin-bottom:10px;">
-            <button type="button" class="btn btn-sm btn-info" id="btnGenAPI">
+            <button type="button" class="btn btn-sm btn-info" id="btnShowGenAPI">
               <i class="ace-icon fa fa-plus-circle bigger-110"></i>
               Input Using API
             </button>
@@ -238,6 +238,68 @@
     </div>
   </div>
 </div>
+
+<!-- staticBackdrop Modal -->
+<div class="modal fade" id="modalGenAPI" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Input from API</h4>
+      </div>
+      <form id="frmGenAPI">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12 col-md-12">
+              <div style="display: block;
+              overflow-x: auto;
+              overflow-y: auto;
+              white-space: nowrap;
+              height: 600px;">
+                <div class="row">
+                  <div class="col-xs-12 col-md-4">
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label class="col-xs-2 col-sm-2 control-label no-padding-right"> Tahun</label>
+
+                        <div class="col-xs-6 col-sm-6">
+                          <input type="text" name="gen_tahun" maxlength="4" onkeypress="return onlyNumberKey(event)"
+                            class="form-control">
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                          <button class="btn btn-sm btn-info" id="btnGenAPI">Generate</button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <table id="tb_genAPI" class="table table-bordered" style="min-width: 700px">
+                  <thead>
+                    <tr>
+                      <th style="text-align: center;width: 50px;">
+                        {{-- <button class="btn btn-xs btn-info"><i class="fa fa-plus"></i></button> --}}
+                      </th>
+                      <th style="width: 80px">Tanggal</th>
+                      <th style="width: 250px">Nama</th>
+                      <th style="width: 100px">Tipe</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 @section('page-js')
 <script src="{{ asset('js/datatables.min.js') }}"></script>
@@ -267,6 +329,7 @@
   $(document).ajaxStop(function(){
     $('#overlay').fadeOut(500);
   });
+
 
   REFRESH_DATA()
   function REFRESH_DATA() {
@@ -450,8 +513,49 @@
     ACTION_PROCESS(urlPost, formData, method)
   }
 
+  $("#btnShowGenAPI").click(function(){
+    event.preventDefault()
+    $("#modalGenAPI").modal('show')
+  })
+
   $("#btnGenAPI").click(function(){
+    event.preventDefault()
+    if($("[name='gen_tahun']").val() == ""){
+      alert('Input Tahun')
+      $("[name='gen_tahun']").focus()
+      return
+    }
     
+    $.ajax({
+      url: "{{ route('master.libur.liburAPI') }}",
+      type: "POST",
+      data: {
+        tahun: $("[name='gen_tahun']").val()
+      },
+      dataType: "JSON",
+      success: function(result){
+        // console.log(result)
+        let arr = result['data']
+        let row=''
+        for (var item of arr.reverse()) {
+          row += "<tr>"+
+                  "<td style='text-align: center'><button class='btn btn-xs btn-danger'><i class='fa fa-minus'></i></button></td>"+
+                  "<td><input type='text' name='tgllibur[]' class='form-control datepicker' value='"+item.tanggal+"'></td>"+
+                  "<td><input type='text' name='libur_name[]' class='form-control'  value='"+item.nama+"'></td>"+
+                  "<td><select name='type[]' class='form-control' >"+
+                  @foreach ($data['tipe_libur'] as $item)
+                  "<option value='{{ $item->code }}'>{{ $item->desc }}</option>"+
+                  @endforeach
+                  "</select></td></tr>"
+        }
+        $("#tb_genAPI tbody").html(row)
+        $(".datepicker").datepicker({
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: "yy-mm-dd",
+        })
+      }
+    })
   })
 </script>
 @endsection

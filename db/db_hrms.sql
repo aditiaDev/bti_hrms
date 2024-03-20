@@ -11,7 +11,7 @@
  Target Server Version : 50733 (5.7.33)
  File Encoding         : 65001
 
- Date: 19/03/2024 16:08:08
+ Date: 20/03/2024 16:13:39
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `conf_master_code`  (
   `note` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `conf_master_code_type_code_unique`(`type`, `code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of conf_master_code
@@ -93,6 +93,8 @@ INSERT INTO `conf_master_code` VALUES (56, 'DAYOFWEEK', '4', 'Rabu', NULL);
 INSERT INTO `conf_master_code` VALUES (57, 'DAYOFWEEK', '5', 'Kamis', NULL);
 INSERT INTO `conf_master_code` VALUES (58, 'DAYOFWEEK', '6', 'Jumat', NULL);
 INSERT INTO `conf_master_code` VALUES (59, 'DAYOFWEEK', '7', 'Sabtu', NULL);
+INSERT INTO `conf_master_code` VALUES (60, 'TIPE LIBUR', '1', 'LIBUR', NULL);
+INSERT INTO `conf_master_code` VALUES (61, 'TIPE LIBUR', '2', 'CUTI BERSAMA', NULL);
 
 -- ----------------------------
 -- Table structure for conf_role
@@ -104,7 +106,7 @@ CREATE TABLE `conf_role`  (
   `isactive` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `conf_role_role_name_unique`(`role_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of conf_role
@@ -130,7 +132,7 @@ CREATE TABLE `failed_jobs`  (
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `failed_jobs_uuid_unique`(`uuid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of failed_jobs
@@ -160,7 +162,7 @@ CREATE TABLE `history_transfer_employee`  (
   `note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of history_transfer_employee
@@ -175,55 +177,56 @@ CREATE TABLE `list_libur`  (
   `tahun` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tgllibur` date NOT NULL,
   `libur_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` tinyint(4) NOT NULL COMMENT '0=Libur,1=Cuti Bersama',
   `note` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `isreduce_leave` tinyint(4) NOT NULL COMMENT '0=tidak mengurangi cuti tahunan,1=mengurangi cuti tahunan',
+  `id_cuti` int(11) NULL DEFAULT NULL COMMENT 'Pengurangan cuti dari master_cuti',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of list_libur
 -- ----------------------------
-INSERT INTO `list_libur` VALUES (1, '2023', '2023-01-01', 'Tahun Baru Masehi 2023', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (2, '2023', '2023-01-22', 'Tahun Baru Imlek 2574 Kongzili', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (3, '2023', '2023-02-18', 'Isra Mikraj Nabi Muhammad SAW', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (4, '2023', '2023-03-22', 'Hari Suci Nyepi Tahun Baru Saka 1945', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (5, '2023', '2023-04-07', 'Wafat Isa Al Masih', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (6, '2023', '2023-04-22', 'Hari Raya Idul Fitri 1444 Hijriah', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (7, '2023', '2023-04-23', 'Hari Raya Idul Fitri 1444 Hijriah', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (8, '2023', '2023-05-01', 'Hari Buruh Internasional', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (9, '2023', '2023-05-18', 'Kenaikan Isa Al Masih', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (10, '2023', '2023-06-01', 'Hari Lahir Pancasila', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (11, '2023', '2023-06-04', 'Hari Raya Waisak 2567 BE', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (12, '2023', '2023-06-29', 'Hari Raya Idul Adha 1444 Hijriah', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (13, '2023', '2023-07-19', 'Tahun Baru Islam 1445 Hijriah', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (14, '2023', '2023-08-17', 'Hari Kemerdekaan RI', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (15, '2023', '2023-09-28', 'Maulid Nabi Muhammad SAW', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (16, '2023', '2023-12-25', 'Hari Raya Natal', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (17, '2023', '2023-04-21', 'Cuti Bersama 2023', 'CUTI BERSAMA', NULL, 1, NULL, NULL);
-INSERT INTO `list_libur` VALUES (18, '2023', '2023-04-24', 'Cuti Bersama 2023', 'CUTI BERSAMA', NULL, 1, NULL, NULL);
-INSERT INTO `list_libur` VALUES (19, '2023', '2023-04-25', 'Cuti Bersama 2023', 'CUTI BERSAMA', NULL, 1, NULL, NULL);
-INSERT INTO `list_libur` VALUES (20, '2023', '2023-04-26', 'Cuti Bersama 2023', 'CUTI BERSAMA', NULL, 1, NULL, NULL);
-INSERT INTO `list_libur` VALUES (21, '2023', '2023-04-27', 'Cuti Bersama 2023', 'CUTI BERSAMA', NULL, 1, NULL, NULL);
-INSERT INTO `list_libur` VALUES (22, '2024', '2024-01-01', 'Tahun Baru 2024', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (23, '2024', '2024-02-08', 'Isra Mi\'raj Nabi Muhammad SAW', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (24, '2024', '2024-02-10', 'TahunBaru Imlek', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (25, '2024', '2024-03-11', 'Hari Raya Nyepi', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (26, '2024', '2024-03-29', 'Wafat Isa Al Masih', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (27, '2024', '2024-03-31', 'Hari Paskah', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (28, '2024', '2024-04-10', 'Hari Raya Idul Fitri', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (29, '2024', '2024-04-11', 'Hari Raya Idul Fitri - Day 2', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (30, '2024', '2024-05-01', 'Hari Buruh', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (31, '2024', '2024-05-09', 'Kenaikan Isa Al Masih', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (32, '2024', '2024-05-23', 'Hari Raya Waisak', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (33, '2024', '2024-06-01', 'Hari Lahir Pancasila', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (34, '2024', '2024-06-17', 'Hari Raya Idul Adha', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (35, '2024', '2024-07-07', 'Tahun Baru Islam 1446 H', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (36, '2024', '2024-08-17', 'Hari Kemerdekaan RI', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (37, '2024', '2024-09-16', 'Maulid Nabi Muhammad SAW', 'LIBUR', NULL, 0, NULL, NULL);
-INSERT INTO `list_libur` VALUES (38, '2024', '2024-12-25', 'Hari Raya Natal', 'LIBUR', NULL, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (1, '2023', '2023-01-01', 'Tahun Baru Masehi 2023', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (2, '2023', '2023-01-22', 'Tahun Baru Imlek 2574 Kongzili', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (3, '2023', '2023-02-18', 'Isra Mikraj Nabi Muhammad SAW', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (4, '2023', '2023-03-22', 'Hari Suci Nyepi Tahun Baru Saka 1945', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (5, '2023', '2023-04-07', 'Wafat Isa Al Masih', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (6, '2023', '2023-04-22', 'Hari Raya Idul Fitri 1444 Hijriah', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (7, '2023', '2023-04-23', 'Hari Raya Idul Fitri 1444 Hijriah', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (8, '2023', '2023-05-01', 'Hari Buruh Internasional', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (9, '2023', '2023-05-18', 'Kenaikan Isa Al Masih', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (10, '2023', '2023-06-01', 'Hari Lahir Pancasila', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (11, '2023', '2023-06-04', 'Hari Raya Waisak 2567 BE', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (12, '2023', '2023-06-29', 'Hari Raya Idul Adha 1444 Hijriah', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (13, '2023', '2023-07-19', 'Tahun Baru Islam 1445 Hijriah', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (14, '2023', '2023-08-17', 'Hari Kemerdekaan RI', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (15, '2023', '2023-09-28', 'Maulid Nabi Muhammad SAW', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (16, '2023', '2023-12-25', 'Hari Raya Natal', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (17, '2023', '2023-04-21', 'Cuti Bersama 2023', 2, NULL, 1, 5, NULL, NULL);
+INSERT INTO `list_libur` VALUES (18, '2023', '2023-04-24', 'Cuti Bersama 2023', 2, NULL, 1, 5, NULL, NULL);
+INSERT INTO `list_libur` VALUES (19, '2023', '2023-04-25', 'Cuti Bersama 2023', 2, NULL, 1, 5, NULL, NULL);
+INSERT INTO `list_libur` VALUES (20, '2023', '2023-04-26', 'Cuti Bersama 2023', 2, NULL, 1, 5, NULL, NULL);
+INSERT INTO `list_libur` VALUES (21, '2023', '2023-04-27', 'Cuti Bersama 2023', 2, NULL, 1, 5, NULL, NULL);
+INSERT INTO `list_libur` VALUES (22, '2024', '2024-01-01', 'Tahun Baru 2024', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (23, '2024', '2024-02-08', 'Isra Mi\'raj Nabi Muhammad SAW', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (24, '2024', '2024-02-10', 'TahunBaru Imlek', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (25, '2024', '2024-03-11', 'Hari Raya Nyepi', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (26, '2024', '2024-03-29', 'Wafat Isa Al Masih', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (27, '2024', '2024-03-31', 'Hari Paskah', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (28, '2024', '2024-04-10', 'Hari Raya Idul Fitri', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (29, '2024', '2024-04-11', 'Hari Raya Idul Fitri - Day 2', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (30, '2024', '2024-05-01', 'Hari Buruh', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (31, '2024', '2024-05-09', 'Kenaikan Isa Al Masih', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (32, '2024', '2024-05-23', 'Hari Raya Waisak', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (33, '2024', '2024-06-01', 'Hari Lahir Pancasila', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (34, '2024', '2024-06-17', 'Hari Raya Idul Adha', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (35, '2024', '2024-07-07', 'Tahun Baru Islam 1446 H', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (36, '2024', '2024-08-17', 'Hari Kemerdekaan RI', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (37, '2024', '2024-09-16', 'Maulid Nabi Muhammad SAW', 1, NULL, 0, 0, NULL, NULL);
+INSERT INTO `list_libur` VALUES (38, '2024', '2024-12-25', 'Hari Raya Natal', 1, NULL, 0, 0, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for master_cuti
@@ -240,7 +243,7 @@ CREATE TABLE `master_cuti`  (
   `isactive` tinyint(4) NOT NULL COMMENT '0=not active, 1=active',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `master_cuti_cuti_name_unique`(`cuti_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_cuti
@@ -278,7 +281,7 @@ CREATE TABLE `master_departemen`  (
   `isactive` tinyint(4) NOT NULL COMMENT '1=aktif, 0=non aktif',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `master_departemen_dept_name_unique`(`dept_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_departemen
@@ -316,7 +319,7 @@ CREATE TABLE `master_divisi`  (
   `note` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `isactive` tinyint(4) NOT NULL COMMENT '1=aktif, 0=non aktif',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_divisi
@@ -378,7 +381,7 @@ CREATE TABLE `master_jabatan`  (
   `note` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `isactive` tinyint(4) NOT NULL COMMENT '1=aktif, 0=non aktif',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_jabatan
@@ -502,7 +505,7 @@ CREATE TABLE `master_karyawan`  (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `master_karyawan_nik_unique`(`nik`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2814 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2814 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_karyawan
@@ -632,7 +635,7 @@ INSERT INTO `master_karyawan` VALUES (375, 'INA000296', 'ROFIQOH MITHAMELINA', 1
 INSERT INTO `master_karyawan` VALUES (376, 'INA000260', 'RIFKY RAMADHANI', 1, 17, 32, 'NAWANGSARI RT 016 RW 002 DESA NAWANGSARI,KECAMATAN WELERI, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '2000-12-18', 1, 2, 'INDONESIA', 'ISLAM', 1, '3324121812000004', '2022-05-17', '2023-06-16', '', '', 1, 2, 'MANDIRI', '1360030731597', '087829173112', '', 0, '', 2, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (377, 'INA000233', 'NUR AINI', 1, 25, 32, 'DUSUN KRAJAN RT.001/RW.002 DESA SENDANGDAWUHAN, KECAMATAN ROWOSARI, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '1999-04-08', 2, 2, 'INDONESIA', 'ISLAM', 1, '3324164804990003', '2022-05-13', '2023-06-16', '', '', 1, 2, 'MANDIRI', '1360030909706', '089621211987', '', 0, '', 1, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (379, 'INA000239', 'EKA KIKI RACHMAWATI', 3, 26, 2, 'GEDONG RT 001 RW 005 DES SUKOMULYO, KECAMATAN KALIWUNGU SELATAN, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '1996-08-28', 2, 1, 'INDONESIA', 'ISLAM', 1, '3324086808960002', '2022-05-09', '2023-06-16', '', '', 2, 2, 'MANDIRI', '1360030153784', '0895360562659', '', 0, '', 2, 1, NULL, NULL);
-INSERT INTO `master_karyawan` VALUES (380, 'INA000298', 'A. YOGI PUGUH ARISTUTA', 11, 18, 36, 'KADIPIRO RT 001 RW 006 DESA KARANGTENGAH, KECAMATAN TUNTANG, KABUPATEN SEMARANG, PROVINSI JAWA TENGAH', NULL, '1992-02-16', 1, 1, 'INDONESIA', 'ISLAM', 1, '3322061602920004', '2022-05-23', NULL, '81.255.957.3-505.000', NULL, 2, 2, NULL, '1360030864323', '085740781484', NULL, NULL, NULL, 2, 1, NULL, '2024-03-18 11:24:59');
+INSERT INTO `master_karyawan` VALUES (380, 'INA000298', 'A. YOGI PUGUH ARISTUTA', 11, 18, 36, 'KADIPIRO RT 001 RW 006 DESA KARANGTENGAH, KECAMATAN TUNTANG, KABUPATEN SEMARANG, PROVINSI JAWA TENGAH', NULL, '1992-02-16', 1, 1, 'INDONESIA', 'ISLAM', 1, '3322061602920004', '2022-05-23', NULL, '81.255.957.3-505.000', NULL, 2, 2, NULL, '1360030864323', '085740781484', NULL, NULL, NULL, 2, 1, NULL, '2024-03-20 09:30:16');
 INSERT INTO `master_karyawan` VALUES (383, 'INA000241', 'MAULA LINATUL MUNA', 1, 25, 32, 'TURUNREJO RT 006 RW 009 DESA TURUNREJO, KECAMATAN BRANGSONG. KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '2000-01-21', 2, 2, 'INDONESIA', 'ISLAM', 1, '3324096101000001', '2022-05-17', '2023-06-16', '', '', 1, 2, 'MANDIRI', '', '081617250230', '', 0, '', 1, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (384, 'INA000242', 'KARTINININGSIH', 1, 25, 32, 'KP.JUKUNGAN RT 002 RW 002 DESA KRAJAN KULON KECAMATAN KALIWUNGU KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '2001-04-21', 2, 2, 'INDONESIA', 'ISLAM', 1, '3324086104010004', '2022-05-17', '2023-06-16', '', '', 1, 2, 'MANDIRI', '1360030873241', '087895514627', '', 0, '', 1, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (385, 'INA000246', 'NUR ROKHIM', 1, 25, 32, 'GEMPOL BAPANG RT 005 RW 002 DESA BRANGSONG. KECAMATAN BRANGSONG. KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '1994-03-05', 1, 1, 'INDONESIA', 'ISLAM', 1, '3324090503940004', '2022-05-17', '2023-06-16', '', '', 1, 2, 'MANDIRI', '', '085642231312', '', 0, '', 1, 1, NULL, NULL);
@@ -2187,7 +2190,7 @@ INSERT INTO `master_karyawan` VALUES (2327, 'INA000401', 'SUPRIYADI', 3, 26, 32,
 INSERT INTO `master_karyawan` VALUES (2328, 'INA001686', 'KAUTSAR AIRA', 6, 27, 76, '', '', '2000-07-20', 1, 2, '', '', 1, '', '2023-12-18', '2024-12-12', '', '', 1, 2, 'MANDIRI', '', '0895359953041', '', 0, '', 1, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (2330, 'INA001651', 'MUHAMAD SUKRON', 6, 27, 76, '', '', '2002-06-04', 1, 2, '', '', 1, '', '2023-12-15', '2024-12-09', '', '', 1, 2, 'MANDIRI', '', '083836820562', '', 0, '', 1, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (2331, 'INA001710', 'BASRAH PUTRA PERDANA', 6, 27, 76, 'DESA JAMBEARUM RT003 RW005, KECAMATAN PATEBON, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '2003-04-13', 1, 2, 'INDONESIA', 'ISLAM', 1, '3324141304030002', '2023-12-21', '2024-12-15', '', '', 1, 2, 'MANDIRI', '', '081326388620', '', 0, '', 1, 1, NULL, NULL);
-INSERT INTO `master_karyawan` VALUES (2332, 'INA001685', 'A. RIFQI ARIJAL', 6, 27, 76, NULL, 'KENDAL', '1993-08-18', 1, 2, '', '', 1, '3324101808930002', '2023-12-18', '2024-12-12', NULL, NULL, 1, 2, '008', '1350017115229', '087731076004', '', 0, '', 1, 0, NULL, '2024-03-18 11:06:47');
+INSERT INTO `master_karyawan` VALUES (2332, 'INA001685', 'A. RIFQI ARIJAL', 6, 27, 76, NULL, 'KENDAL', '1993-08-18', 1, 2, '', '', 1, '3324101808930002', '2023-12-18', '2024-12-12', NULL, NULL, 1, 2, '008', '1350017115229', '087731076004', '', 0, '', 1, 1, NULL, '2024-03-20 09:30:23');
 INSERT INTO `master_karyawan` VALUES (2333, 'INA002111', 'IMAM TAUFIK', 6, 27, 44, 'JL. ANJASMORO IIIA RT 002 RW004, KELURAHAN TURIREJO, KECAMATAN LAWANG, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '2024-01-29', 1, 2, 'INDONESIA', 'ISLAM', 1, '3517090201940003', '2024-01-29', '2025-01-23', '', '', 1, 2, 'MANDIRI', '', '081286513228', '', 0, '', 0, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (2334, 'INA002112', 'ALFIAN FATKHULLOH', 3, 26, 30, 'GANG BIMA RT002 RW002, KELURAHAN REJOSARI, KECAMATAN CEPIRING, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '2001-10-30', 1, 2, 'INDONESIA', 'ISLAM', 1, '3315042706960003', '2024-01-29', '2025-01-23', '', '', 1, 2, 'MANDIRI', '', '081393180148', '', 0, '', 2, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (2335, 'INA002113', 'AISAH SUGIYAMA', 13, 31, 42, 'DUSUN 02 WONOKROMO RT010 RW003, KELURAHAN WONOKROMO, KECAMATAN COMAL, KABUPATEN PEMALANG, PROVINSI JAWA TENGAH', '', '1998-04-18', 1, 2, 'INDONESIA', 'ISLAM', 1, '3327125804980005', '2024-01-29', '2025-01-23', '', '', 1, 2, 'MANDIRI', '', '085772300598', '', 0, '', 2, 1, NULL, NULL);
@@ -2667,7 +2670,7 @@ INSERT INTO `master_karyawan` VALUES (2808, 'INA002590', 'EKO MARDIANTO', 15, 28
 INSERT INTO `master_karyawan` VALUES (2809, 'INA002587', 'MULYONO', 3, 26, 66, 'JL. TULIP PERUM GENTONG MAS INDAH RT 002 RW009, KELURAHAN LIMBANGAN, KECAMATAN SUKARAJA, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', 'GROBOGAN           ', '1996-01-30', 1, 2, '', '', 1, '3202333001960004', '2024-03-04', '2025-02-27', '', '', 1, 2, 'MANDIRI', '', '085798819884', '', 0, '', 0, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (2810, 'INA002589', 'ROMARIO BAGOES PRAKOSO', 3, 26, 26, 'KP. RUKUNSARI RT002 RW006, KELURAHAN KUTOHARJO, KECAMATAN KALIWUNGU, KABUPATEN KENDAL, PROVINSI JAWA TENGAH', '', '1994-09-21', 1, 2, 'INDONESIA', '', 1, '3324082109940002', '2024-03-04', '2025-02-27', '', '', 2, 2, 'MANDIRI', '', '085701209040', '', 0, '', 0, 1, NULL, NULL);
 INSERT INTO `master_karyawan` VALUES (2811, 'INA002588', 'NUR ANJAS ADYTIAWAN', 3, 26, 26, 'PURWOJATI RT001 RW003, KELURAHAN PURWOJATI, KECAMATAN PURWOJATI, KABUPATEN BANYUMAS, PROVINSI JAWA TENGAH', 'BANYUMAS           ', '1995-05-15', 1, 2, '', '', 1, '3302131505950001', '2024-03-04', '2025-02-27', '', '', 1, 2, 'MANDIRI', '', '081575701559', '', 0, '', 0, 1, NULL, NULL);
-INSERT INTO `master_karyawan` VALUES (2813, 'INA002592', 'INI ADALAH TEST', 1, 15, 32, 'DESA DI JEPARA,\r\nKECAMATAN KEDUNG, KAB. JEPARA, PROVINSI JAWA TENGAH', 'JEPARA', '2000-08-19', 2, 2, 'INDONESIA', 'KRISTEN', 1, '3320011908000001', '2024-01-02', NULL, NULL, 'TK0', 1, 2, '008', '1234567', '089856765678', 'test@test.com', 7, 'TELEKOMUNIKASI', 1, 0, '2024-03-16 09:31:51', '2024-03-16 09:31:51');
+INSERT INTO `master_karyawan` VALUES (2813, 'INA002592', 'INI ADALAH TEST', 1, 15, 32, 'DESA DI JEPARA,\r\nKECAMATAN KEDUNG, KAB. JEPARA, PROVINSI JAWA TENGAH', 'JEPARA', '2000-08-19', 2, 2, 'INDONESIA', 'KRISTEN', 1, '3320011908000001', '2024-01-02', NULL, NULL, 'TK0', 1, 2, '008', '1234567', '089856765678', 'test@test.com', 7, 'TELEKOMUNIKASI', 1, 1, '2024-03-16 09:31:51', '2024-03-20 09:30:13');
 
 -- ----------------------------
 -- Table structure for master_shift_dtl
@@ -2709,7 +2712,7 @@ CREATE TABLE `master_shift_dtl`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 372 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 372 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_shift_dtl
@@ -3100,7 +3103,7 @@ CREATE TABLE `master_shift_hdr`  (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `master_shift_hdr_shift_name_unique`(`shift_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of master_shift_hdr
@@ -3168,7 +3171,7 @@ CREATE TABLE `migrations`  (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of migrations
@@ -3198,7 +3201,7 @@ CREATE TABLE `password_resets`  (
   `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   INDEX `password_resets_email_index`(`email`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of password_resets
@@ -3221,7 +3224,7 @@ CREATE TABLE `personal_access_tokens`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `personal_access_tokens_token_unique`(`token`) USING BTREE,
   INDEX `personal_access_tokens_tokenable_type_tokenable_id_index`(`tokenable_type`, `tokenable_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of personal_access_tokens
@@ -3246,7 +3249,7 @@ CREATE TABLE `users`  (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `users_username_unique`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users

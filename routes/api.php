@@ -47,4 +47,5 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/master/store', [LiburController::class, 'store'])->name('master.libur.store');
   Route::post('/master/update', [LiburController::class, 'update'])->name('master.libur.update');
   Route::post('/master/destroy', [LiburController::class, 'destroy'])->name('master.libur.destroy');
+  Route::post('/master/liburAPI', [LiburController::class, 'getLiburAPI'])->name('master.libur.liburAPI');
 });

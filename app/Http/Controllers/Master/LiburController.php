@@ -10,7 +10,7 @@ use App\Models\Master\MCuti;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class LiburController extends Controller
 {
@@ -127,12 +127,18 @@ class LiburController extends Controller
 
   public function getLiburAPI()
   {
-    $client = new Client();
+    $response = Http::withOptions(['verify' => false])->get('https://api-harilibur.vercel.app/api?year=2025');
+    $res = $response->json();
+    $data = [];
+    $i = 0;
+    foreach ($res as $key => $value) {
+      if ($value['is_national_holiday'] == true) {
+        $data[$i]['tanggal'] = date("Y-m-d", strtotime($value['holiday_date']));
+        $data[$i]['nama'] = $value['holiday_name'];
+        $i++;
+      }
+    }
 
-    $res = $client->get('https://api-harilibur.vercel.app/api?year=2025');
-
-    $res->getHeader('content-type');
-    $contents   = json_decode($res->getBody());
-    dd($contents);
+    return json_encode(array('data' => $data));
   }
 }
