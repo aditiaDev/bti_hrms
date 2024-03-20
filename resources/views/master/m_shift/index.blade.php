@@ -160,11 +160,11 @@
     tb_hdr = $("#tb_hdr").DataTable({
       "ordering": true,
       "paging": false,
-      fixedHeader: {
-        header: true,
-      },
+      // fixedHeader: {
+      //   header: true,
+      // },
       scrollY:400,
-      scrollX: true,
+      // scrollX: true,
       "ajax": {
         "url": "{{ route('master.shift.gethdrall') }}",
         "type": "POST",

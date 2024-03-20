@@ -18,10 +18,13 @@ class CreateListLiburTable extends Migration
       $table->string('tahun', 4);
       $table->date('tgllibur');
       $table->string('libur_name', 100);
-      $table->string('type', 50);
+      $table->tinyInteger('type')->comment('1=Libur,2=Cuti Bersama');
       $table->string('note', 200)->nullable();
       $table->tinyInteger('isreduce_leave')->comment('0=tidak mengurangi cuti tahunan,1=mengurangi cuti tahunan');
+      $table->integer('id_cuti')->nullable()->comment('Pengurangan cuti dari master_cuti');
       $table->timestamps();
+
+      $table->unique(['tgllibur', 'libur_name']);
     });
   }
 

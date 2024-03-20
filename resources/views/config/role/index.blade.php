@@ -60,7 +60,7 @@
                 </div>
                 <div class="widget-toolbox padding-4 clearfix">
                   <div class="btn-group pull-left">
-                    <button class="btn btn-sm btn-info" onclick="resetForm()">
+                    <button class="btn btn-sm btn-default" onclick="resetForm()">
                       <i class="ace-icon fa fa-times bigger-125"></i>
                       Cancel
                     </button>

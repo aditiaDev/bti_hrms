@@ -5,10 +5,10 @@ namespace App\Models\Master;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Libur extends Model
+class MCuti extends Model
 {
     use HasFactory;
-    protected $table = 'list_libur';
-    public $timestamps = true;
+    protected $table = 'master_cuti';
+    public $timestamps = false;
     protected $guarded = [];
 }

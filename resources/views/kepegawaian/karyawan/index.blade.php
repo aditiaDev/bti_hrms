@@ -400,12 +400,12 @@
     tb_data = $("#tb_data").DataTable({
       "ordering": true,
       "paging": false,
-      fixedHeader: {
-            header: true,
-            // headerOffset: 45,
-            },
-            scrollY:600,
-            scrollX: true,
+      // fixedHeader: {
+      //   header: true,
+      //   // headerOffset: 45,
+      // },
+      scrollY:600,
+      scrollX: true,
       "ajax": {
         "url": "{{ route('karyawan.getall') }}",
         "type": "POST",
