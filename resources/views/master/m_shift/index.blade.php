@@ -25,7 +25,7 @@
       <div class="row">
         <div class="col-xs-12 col-md-12">
           <div style="margin-bottom:10px;">
-            <a class="btn btn-sm btn-info" href="#" id="btnNew">
+            <a class="btn btn-sm btn-info" href="{{ route('master.shift.new') }}" id="btnNew">
               <i class="ace-icon fa fa-plus-circle bigger-110"></i>
               New
             </a>

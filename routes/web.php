@@ -40,5 +40,6 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/karyawan/{post}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
 
   Route::get('/master/shift', [MShiftController::class, 'index'])->name('master.shift');
+  Route::get('/master/shift/new', [MShiftController::class, 'new'])->name('master.shift.new');
   Route::get('/master/libur', [LiburController::class, 'index'])->name('master.libur');
 });

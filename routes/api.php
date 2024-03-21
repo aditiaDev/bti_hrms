@@ -42,10 +42,11 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::post('/master/shift/gethdrall', [MShiftController::class, 'gethdrall'])->name('master.shift.gethdrall');
   Route::post('/master/shift/getdtlbyid', [MShiftController::class, 'getdtlbyid'])->name('master.shift.getdtlbyid');
+  Route::post('/master/shift/store', [MShiftController::class, 'store'])->name('master.shift.store');
 
   Route::post('/master/libur/getByYear', [LiburController::class, 'getByYear'])->name('master.libur.getByYear');
-  Route::post('/master/store', [LiburController::class, 'store'])->name('master.libur.store');
-  Route::post('/master/update', [LiburController::class, 'update'])->name('master.libur.update');
-  Route::post('/master/destroy', [LiburController::class, 'destroy'])->name('master.libur.destroy');
-  Route::post('/master/liburAPI', [LiburController::class, 'getLiburAPI'])->name('master.libur.liburAPI');
+  Route::post('/master/libur/store', [LiburController::class, 'store'])->name('master.libur.store');
+  Route::post('/master/libur/update', [LiburController::class, 'update'])->name('master.libur.update');
+  Route::post('/master/libur/destroy', [LiburController::class, 'destroy'])->name('master.libur.destroy');
+  Route::post('/master/libur/liburAPI', [LiburController::class, 'getLiburAPI'])->name('master.libur.liburAPI');
 });

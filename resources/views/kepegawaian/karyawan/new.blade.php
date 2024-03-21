@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('page-css')
-<link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
 <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
 <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
