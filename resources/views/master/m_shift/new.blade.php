@@ -111,7 +111,7 @@
                                 <div class="checkbox">
                                   <label>
                                     <input name="hari[]" id="hari[{{ $i }}]" value="{{ $item->code }}"
-                                      onchange="cekIsOT({{ $i }})" type="checkbox" class="ace">
+                                      onchange="cekIsOT({{ $i }});chEdited({{ $i }});" type="checkbox" class="ace">
                                     <span class="lbl"> {{ $item->desc }}</span>
                                   </label>
                                   <input name="isOT_day[{{ $i }}]" type="hidden" class="ace" value="1">
@@ -127,7 +127,8 @@
                               <td class="text-right"><label style="padding-top: 10px;">Masuk</label></td>
                               @foreach ($data['field'] as $item)
                               <td colspan="2">
-                                <input type="text" name="masuk[]" class="form-control" maxlength="5" value="00:00">
+                                <input type="text" name="masuk[]" readonly class="form-control" maxlength="5"
+                                  value="00:00">
                               </td>
                               @endforeach
                             </tr>
@@ -138,7 +139,8 @@
                               @endphp
                               @foreach ($data['field'] as $item)
                               <td style="width: 70px;min-width: 70px;">
-                                <input type="text" name="pulang[]" class="form-control" maxlength="5" value="00:00">
+                                <input type="text" name="pulang[]" readonly class="form-control" maxlength="5"
+                                  value="00:00">
                               </td>
                               <td style="min-width: 75px;">
                                 <div class="checkbox">
@@ -164,7 +166,7 @@
                               @endphp
                               @foreach ($data['field'] as $item)
                               <td style="width: 70px;min-width: 70px;">
-                                <input type="text" name="break_in{{ $a }}[]" class="form-control" maxlength="5"
+                                <input type="text" name="break_in{{ $a }}[]" readonly class="form-control" maxlength="5"
                                   value="00:00">
                               </td>
                               <td style="min-width: 75px;">
@@ -190,8 +192,8 @@
                                 @endphp
                                 @foreach ($data['field'] as $item)
                                 <td style="width: 70px;min-width: 70px;">
-                                  <input type="text" name="break_out{{ $a }}[]" class="form-control" maxlength="5"
-                                    value="00:00">
+                                  <input type="text" name="break_out{{ $a }}[]" readonly class="form-control"
+                                    maxlength="5" value="00:00">
                                 </td>
                                 <td style="min-width: 75px;">
                                   <div class="checkbox">
@@ -283,6 +285,18 @@
       var break_in3 = parseWaktu($("[name='break_in3[]']").eq(index).val());
       var break_out3 = parseWaktu($("[name='break_out3[]']").eq(index).val());
 
+      if(break_out1 < break_in1){
+        break_out1.setDate(break_out1.getDate() + 1);
+      }
+
+      if(break_out2 < break_in2){
+        break_out2.setDate(break_out2.getDate() + 1);
+      }
+
+      if(break_out3 < break_in3){
+        break_out3.setDate(break_out3.getDate() + 1);
+      }
+
       var jmlIstirahat = ( (break_out1 - break_in1) + (break_out2 - break_in2) + (break_out3 - break_in3) ) 
 
       var selisihJamBreak = Math.floor(jmlIstirahat / (1000 * 60 * 60));
@@ -290,9 +304,6 @@
 
       var BreakTime = ("0" + selisihJamBreak).slice(-2) + ":" + ("0" + selisihMenitBreak).slice(-2);
       var waktuIstirahat = parseWaktu(BreakTime);
-
-      // console.log(BreakTime)
-
 
       // Menambah 1 hari pada waktu keluar jika shift malam
       if (waktuKeluar < waktuMasuk) {
@@ -312,7 +323,6 @@
       // Format waktu
       var jamKerja = ("0" + selisihJam).slice(-2) + ":" + ("0" + selisihMenit).slice(-2);
 
-      // console.log(jamKerja)
       $("[name='workhour[]']").eq(index).val(jamKerja)
     });
   })
@@ -344,6 +354,26 @@
       value = 0
     }
     $("[name='isOT_day["+param+"]']").val(value)
+  }
+
+  function chEdited(param){
+    let inputName = "hari["+param+"]"
+    var checkbox = document.getElementById(inputName);
+    let value = true
+    if(checkbox.checked == true){
+      value = false
+    }
+    $("[name='masuk[]']").eq(param).attr('readonly', value)
+    $("[name='pulang[]']").eq(param).attr('readonly', value)
+
+    $("[name='break_in1[]']").eq(param).attr('readonly', value)
+    $("[name='break_out1[]']").eq(param).attr('readonly', value)
+
+    $("[name='break_in2[]']").eq(param).attr('readonly', value)
+    $("[name='break_out2[]']").eq(param).attr('readonly', value)
+
+    $("[name='break_in3[]']").eq(param).attr('readonly', value)
+    $("[name='break_out3[]']").eq(param).attr('readonly', value)
   }
 </script>
 @endsection
